@@ -1,8 +1,8 @@
 const Home: React.FC = () => {
     return (
-        <>
-        <h2> Project_parma</h2>
-        </>
+        <div>
+            <h2> Project_parma</h2>
+        </div>
     )
 }
 
