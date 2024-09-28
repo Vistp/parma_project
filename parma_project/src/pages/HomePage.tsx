@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Container } from '@mui/material';
 import { Footer } from "../shared/ui/components/Footer";
 import { Header } from "../shared/ui/components/Header";
+import LoginForm from '../widgets/ui/components/LoginForm';
 import { BasikTable } from "../widgets/ui/components/BasikTable";
 import { getData, IDrill } from "../widgets/api";
 
@@ -15,9 +16,10 @@ const HomePage: React.FC = () => {
     return (
         <div>
             <Header />
-                <Container>
-                    <BasikTable drills={data} />
-                </Container>
+            <LoginForm />
+            <Container>
+                <BasikTable drills={data} />
+            </Container>
             <Footer />
         </div>
     )
