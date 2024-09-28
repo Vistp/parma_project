@@ -1,7 +1,11 @@
+import { Footer } from "../shared/ui/components/Footer";
+import { Header } from "../shared/ui/components/Header";
+
 const HomePage: React.FC = () => {
     return (
         <div>
-            <h2> Project_parma</h2>
+            <Header />
+            <Footer />
         </div>
     )
 }
