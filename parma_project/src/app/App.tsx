@@ -1,5 +1,5 @@
 import '../App.css';
-import Home from '../pages/HomePage';
+import HomePage from '../pages/HomePage';
 
 function App() {
 
@@ -7,7 +7,7 @@ function App() {
     <>
        <h1>Vite + React</h1>
        <h2>Hello</h2>
-      <Home/>
+      <HomePage/>
     </>
   )
 }

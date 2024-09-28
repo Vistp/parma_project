@@ -1,4 +1,4 @@
-const Home: React.FC = () => {
+const HomePage: React.FC = () => {
     return (
         <div>
             <h2> Project_parma</h2>
@@ -6,4 +6,4 @@ const Home: React.FC = () => {
     )
 }
 
-export default Home;
+export default HomePage;
