@@ -5,14 +5,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { IDrill } from '../../api';
-import { normalizeDate } from '../../utils/normalizeDate';
+import {IDrill} from "../../../shared/types/types.ts";
+import { normalizeDate } from '../../../shared/utils/normalizeDate.ts';
+import React from "react";
 
 interface ITableDrills {
   drills: IDrill[];
 }
 
-export const BasikTable: React.FC<ITableDrills> = ( props ) => {
+export const BasicTable: React.FC<ITableDrills> = (props ) => {
   const { drills } = props;
 
   return (
