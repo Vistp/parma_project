@@ -15,7 +15,7 @@ export const RegistrationForm: React.FC = () => {
 
   return (
     <>
-      <Button variant="contained" color="primary" onClick={handleOpen}                  aria-labelledby='form-dialog-title'>
+      <Button variant="contained" color="primary" onClick={handleOpen} aria-labelledby='form-dialog-title'>
         Login
       </Button>
       <Dialog open={open} onClose={handleClose}>
