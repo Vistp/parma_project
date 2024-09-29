@@ -1,4 +1,5 @@
 import { AppBar, Toolbar, Typography } from '@mui/material'
+import { RegistrationForm } from '../../../widgets/ui/components/RegistrationForm'
 
 export const Header: React.FC = () => {
 
@@ -12,6 +13,7 @@ export const Header: React.FC = () => {
         >
           Tool Manager
         </Typography>
+        <RegistrationForm />
       </Toolbar>
     </AppBar>
   )
