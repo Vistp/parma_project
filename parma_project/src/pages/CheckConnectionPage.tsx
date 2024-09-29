@@ -18,7 +18,7 @@ const CheckConnectionPage:React.FC = () => {
     }, []);
     return (
         <div>
-            {status == 'OK' ? <HomePage /> : <ErrorPage />}
+            {status === 'OK' ? <HomePage /> : <ErrorPage />}
         </div>
     );
 };
