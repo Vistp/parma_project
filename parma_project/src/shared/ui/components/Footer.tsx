@@ -6,7 +6,7 @@ import CopyrightIcon from '@mui/icons-material/Copyright';
 import React from "react";
 export const Footer: React.FC = () => {
   return (
-    <Box sx={{ flexGrow: 1, position: 'absolute', bottom: 0, width: '100%' }}>
+    <Box sx={{ flexGrow: 1, position: 'static', bottom: 0, width: '100%' }}>
       <AppBar position="static" color='primary'>
         <Toolbar variant="regular" sx={{ mx: 'auto' }}>
           <CopyrightIcon fontSize='small'/>
