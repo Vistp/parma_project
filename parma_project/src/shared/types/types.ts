@@ -8,7 +8,7 @@ export interface IDrill {
     id: number;
     plate: string;
     diameter: number;
-    length: number;
+    length_xD: number;
     key: string;
     is_broken: boolean,
     storage: null,
