@@ -1,67 +1,129 @@
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import {IDrill} from "../../../shared/types/types.ts";
-import { normalizeDate } from '../../../shared/utils/normalizeDate.ts';
-import React from "react";
+import { useEffect, useState } from 'react';
+import '../../../index.css'
+import { 
+  createColumnHelper, 
+  flexRender, 
+  getCoreRowModel, 
+  getSortedRowModel, 
+  SortingState, 
+  useReactTable 
+  } from "@tanstack/react-table"
+import { IDrill } from '../../../shared/types/types';
+import { getData } from '../../../shared/utils/api';
+import { endpoints } from '../../../shared/consts/consts';
 
-interface ITableDrills {
-  drills: IDrill[];
-}
+export const BasicTable = () => {
+  const [data, setData] = useState<IDrill[]>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
-export const BasicTable: React.FC<ITableDrills> = (props ) => {
-  const { drills } = props;
+  useEffect(() => {
+    getData(endpoints.drills).then((res) => setData(res))
+  }, [sorting]);
+  
+  const colunmHelper = createColumnHelper<IDrill>()
+
+  const columns = [
+    colunmHelper.accessor('id', {
+      header: () => 'ID',
+      cell: (info) => info.getValue(),
+    }),
+    colunmHelper.accessor('name', {
+      header: () => 'Name',
+      cell: (info) => info.getValue(),
+    }),
+    colunmHelper.accessor('diameter', {
+      header: () => 'Diameter',
+      cell: (info) => info.getValue(),
+    }),
+    colunmHelper.accessor('length_xD', {
+      header: () => 'Length',
+      cell: (info) => info.getValue(),
+    }),
+    colunmHelper.accessor('deep_of_drill', {
+      header: () => 'Deep of Drill',
+      cell: (info) => info.getValue(),
+    }),
+    colunmHelper.accessor('plate', {
+      header: () => 'Plate',
+      cell: (info) => info.getValue(),
+    }),
+    colunmHelper.accessor('screws', {
+      header: () => 'Screws',
+      cell: (info) => info.getValue(),
+    }),
+    colunmHelper.accessor('company', {
+      header: () => 'Company',
+      cell: (info) => info.getValue(),
+    }),
+    // colunmHelper.accessor('image_path', {
+    //   header: () => 'Image',
+    //   cell: (info) => info.getValue(),
+    // }),
+  ]
+  const table = useReactTable({
+    data: data,
+    columns,
+    debugTable: false,
+    getCoreRowModel: getCoreRowModel(),
+    state: {
+      sorting
+    },
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
+  })
+
 
   return (
-    <TableContainer component={ Paper }>
-      <Table sx={{ minWidth: 700 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>ID</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Name</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Diameter</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Length</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Deep of Drill</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Plate</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Screws</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Company</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Storage</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Create at</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Update at</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Broken</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Image path</TableCell>
-            <TableCell sx={{ padding: '3px', textAlign: 'center' }}>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {drills.sort((a,b) => a.name.localeCompare(b.name)).map((drill) => (
-            <TableRow
-              key={drill.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell sx={{ padding: '3px', textAlign: 'center' }}>{drill.id}</TableCell>
-              <TableCell sx={{ padding: '3px', textAlign: 'center' }} component="th" scope="row">
-                {drill.name}
-              </TableCell>
-              <TableCell sx={{ padding: '3px', textAlign: 'center' }}>{drill.diameter}</TableCell>
-              <TableCell sx={{ padding: '3px', textAlign: 'center' }}>{drill.length}</TableCell>
-              <TableCell sx={{ padding: '3px', textAlign: 'center' }}>{drill.deep_of_drill}</TableCell>
-              <TableCell sx={{ padding: '3px', textAlign: 'center' }}>{drill.plate}</TableCell>
-              <TableCell sx={{ padding: '3px', textAlign: 'center' }}>{drill.screws}</TableCell>
-              <TableCell sx={{ padding: '3px', textAlign: 'center' }}>{drill.company}</TableCell>
-              <TableCell sx={{ padding: '3px', textAlign: 'center' }}>{drill.storage}</TableCell>
-              <TableCell sx={{ padding: '3px', textAlign: 'center' }}>{normalizeDate(drill.create_at)}</TableCell>
-              <TableCell sx={{ padding: 0, textAlign: 'center' }}>{normalizeDate(drill.update_at)}</TableCell>
-              <TableCell sx={{ padding: 0, textAlign: 'center' }}><input type="checkbox"/></TableCell>
-              <TableCell sx={{ padding: 0, textAlign: 'center' }}>{drill.image_path}</TableCell>
-            </TableRow>
+    <div className='box-table'> 
+      <table className='drills-table'>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id} className='drills-table-cell'>
+                  <div
+                    className={
+                      header.column.getCanSort()
+                        ? 'cursor-pointer select-none'
+                        : ''
+                    }
+                    onClick={header.column.getToggleSortingHandler()}
+                    title={
+                      header.column.getCanSort()
+                        ? header.column.getNextSortingOrder() === 'asc'
+                          ? 'Sort ascending'
+                          : header.column.getNextSortingOrder() === 'desc'
+                            ? 'Sort descending'
+                            : 'Clear sort'
+                          : undefined
+                        }
+                      >
+                    {flexRender(
+                      header.column.columnDef.header, 
+                      header.getContext()
+                    )}
+                    {{
+                      asc: '\u{2191}',
+                      desc: '\u{2193}',
+                    }[header.column.getIsSorted() as string] ?? null}
+                  </div>
+                </th>
+              ))}
+            </tr>
           ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id} className='drills-table-cell'>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
 }
