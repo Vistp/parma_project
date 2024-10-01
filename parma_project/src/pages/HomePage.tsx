@@ -7,6 +7,7 @@ import { BasicTable } from "../widgets/ui/components/BasicTable.tsx";
 import { getData } from "../shared/utils/api.ts";
 import {IDrill} from "../shared/types/types.ts";
 import {endpoints} from "../shared/consts/consts.ts";
+import { ToolsDropdown } from "../widgets/ui/components/ToolsDropdown.tsx";
 
 const HomePage: React.FC = () => {
     const [data, setData] = useState<IDrill[]>([]);
@@ -19,6 +20,7 @@ const HomePage: React.FC = () => {
         <div>
             <Header />
             {/* <LoginForm /> */}
+            <ToolsDropdown />
             <Container>
                 <BasicTable drills={data} />
             </Container>
