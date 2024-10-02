@@ -7,6 +7,7 @@ import {
   Typography,
   Container,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   username: string;
@@ -16,14 +17,20 @@ interface FormData {
 
 const LoginForm: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const navigate = useNavigate();
 
   const onSubmit = (data: FormData) => {
     
     // TODO: добавить логику авторизации
   };
 
+  const handleBack = () => {
+    navigate("/");
+  }
+
   return (
     <Container component="main" maxWidth="sm">
+      <Button onClick={handleBack}>Назад</Button>
       <Box
         sx={{
           display: 'flex',
