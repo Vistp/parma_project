@@ -1,7 +1,7 @@
 export interface IDrill {
     name: string;
     deep_of_drill: number;
-    screws: string;
+    screw: string;
     company: string;
     image_path: null,
     create_at: string;

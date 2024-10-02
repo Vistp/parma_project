@@ -1,3 +1,22 @@
+.container {
+  display: grid;
+  place-items: center;
+  overflow: hidden; /* Запретить родительскому контейнеру прокручиваться */
+}
+
+.container_actions {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+}
+
+.scrollable-content {
+  max-height: 40vh; /* Максимальная высота контента в процентах от высоты окна */
+  overflow-y: auto; /* Включает горизонтальную прокрутку */
+  scrollbar-width: none; /* Скрывает скроллбар */
+  border: 1px solid #ccc;
+}
+
 .drills-table {
   table-layout: fixed;
   width: 100%;
