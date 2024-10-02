@@ -1,3 +1,4 @@
+
 import {AppBar, Button, Toolbar, Typography} from '@mui/material'
 // import { RegistrationForm } from '../../../widgets/ui/components/RegistrationForm'
 import { useNavigate } from 'react-router-dom';
