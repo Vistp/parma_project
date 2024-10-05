@@ -1,13 +1,11 @@
 import { Container } from '@mui/material';
 import { Header } from "../shared/ui/components/Header";
-// import { BasicTable } from "../widgets/ui/components/BasicTable.tsx";
 import { ToolsDropdown } from "../widgets/ui/components/ToolsDropdown.tsx";
 
 const HomePage: React.FC = () => {    
     return (
         <div>
             <Header />
-            <ToolsDropdown />
             <Container
                 sx={{
                     height: '90vh',
@@ -16,8 +14,7 @@ const HomePage: React.FC = () => {
                     backgroundPosition: 'center',
                 }}
             >
-                {/* <BasicTable /> */}
-                
+                <ToolsDropdown /> 
             </Container>
         </div>
     )
