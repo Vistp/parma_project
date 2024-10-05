@@ -3,16 +3,18 @@ import { Header } from "../shared/ui/components/Header";
 import { BasicTable } from "../widgets/ui/components/BasicTable.tsx";
 import { ToolsDropdown } from "../widgets/ui/components/ToolsDropdown.tsx";
 
-const HomePage: React.FC = () => {    
+const DrillsPage: React.FC = () => {
+    const activeItem = "drills";
+
     return (
         <div>
             <Header />
-            <ToolsDropdown />
+            <ToolsDropdown activeTool={activeItem}/>
             <Container>
-                {/* <BasicTable /> */}
+                <BasicTable />
             </Container>
         </div>
     )
 }
 
-export default HomePage;
+export default DrillsPage;

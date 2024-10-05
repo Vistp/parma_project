@@ -1,15 +1,26 @@
-import { Routes, Route } from 'react-router-dom'
-import CheckConnectionPage from "../pages/CheckConnectionPage.tsx";
+import {Routes, Route, useNavigate} from 'react-router-dom'
 import LoginForm from '../widgets/ui/components/LoginForm.tsx';
-// import { RegistrationForm } from '../widgets/ui/components/RegistrationForm.tsx';
+import HomePage from "../pages/HomePage.tsx";
+import ErrorPage from "../pages/ErrorPage.tsx";
+import NotFoundPage from "../pages/NotFoundPage.tsx";
+import {useEffect} from "react";
+import { checkConnectionFunction } from "../shared/utils/checkConnectionFunction.ts";
+import DrillsPage from '../pages/DrillsPage.tsx';
 
 
 function App() {
+    const navigate = useNavigate();
+    useEffect(() => {
+        checkConnectionFunction().then((result) => result == 'OK' ? navigate('/') : navigate('/error'))
+    },[])
 
   return (
     <Routes>
-      <Route path="/" element={<CheckConnectionPage/>}/>
-      <Route path="/registration" element={<LoginForm/>}/>
+        <Route path="/" element={<HomePage />}/>
+        <Route path="/auth" element={<LoginForm />}/>
+        <Route path="/drills" element={<DrillsPage />}/>
+        <Route path="/error" element={<ErrorPage />}/>
+        <Route path="*" element={<NotFoundPage />}/>
     </Routes>
   )
 }
