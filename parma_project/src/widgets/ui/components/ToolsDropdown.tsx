@@ -1,15 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
-export const ToolsDropdown: React.FC = () => {
-    const [selectedTool, setSelectedTool] = useState<string>('');
+interface ToolsDropdownProps {
+    activeTool?: string;
+}
 
+export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({ activeTool }) => {
+    const [selectedTool, setSelectedTool] = useState<string>("");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (activeTool) {
+            setSelectedTool(activeTool);
+        } else {
+            setSelectedTool('');
+        }
+    }, [activeTool]);
     const handleChange = (event: SelectChangeEvent<string>) => {
-        setSelectedTool(event.target.value as string);
+        const value = event.target.value as string;
+        setSelectedTool(value);
     }
+
     return (
         <>
-            <FormControl fullWidth variant="outlined" sx={{ mt: 2, mb:2 }}>
+            <FormControl fullWidth variant="outlined" sx={{ width: '200px', mt: 2, mb: 2 }}>
                 <InputLabel id="tools-dropdown-label">Инструменты</InputLabel>
                 <Select
                     labelId="tools-dropdown-label"
@@ -17,12 +32,11 @@ export const ToolsDropdown: React.FC = () => {
                     onChange={handleChange}
                     label="Инструменты"
                 >
-                    <MenuItem value="drills">Сверла</MenuItem>
-                    <MenuItem value="screws">Винты</MenuItem>
-                    <MenuItem value="archive">Архив</MenuItem>
+                    <MenuItem value="drills" onClick={() => navigate('/drills')}>Сверла</MenuItem>
+                    <MenuItem value="screws" onClick={() => navigate('/screws')}>Винты</MenuItem>
+                    <MenuItem value="archive" onClick={() => navigate('/archive')}>Архив</MenuItem>
                 </Select>
             </FormControl>
-
         </>
-    )
+    );
 }
