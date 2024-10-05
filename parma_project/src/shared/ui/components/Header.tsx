@@ -1,5 +1,4 @@
-import {AppBar, Button, Toolbar, Typography} from '@mui/material'
-// import { RegistrationForm } from '../../../widgets/ui/components/RegistrationForm'
+import {AppBar, Button, Toolbar, Typography} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export const Header: React.FC = () => {
@@ -8,6 +7,9 @@ export const Header: React.FC = () => {
   const handleLogin = () => {
     navigate('/auth');
   }
+  const handleLogoClick = () => {
+    navigate('/')
+  }
 
   return (
     <AppBar position='static' color='primary' >
@@ -15,7 +17,8 @@ export const Header: React.FC = () => {
         <Typography
           variant="h6"
           component="p"
-          sx={{ flexGrow: 1 }}
+          onClick={handleLogoClick}
+          sx={{ flexGrow: 1, cursor: 'pointer' }}
         >
           Tool Manager
         </Typography>
