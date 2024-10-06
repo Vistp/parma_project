@@ -1,15 +1,13 @@
-import { Button, Drawer, Table, TableColumnsType, TableProps, Checkbox, Tag, Switch } from 'antd';
+import { Button, Drawer, Table, TableColumnsType, TableProps, Checkbox, Tag } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import tableStore from '../../../store/tableStore';
 import { IDrill } from '../../../shared/types/types';
 import AddDrillForm from './AddDrillForm';
-import { useTheme } from '../../../context/ThemeContext'; // Импортируйте контекст темы
 
 const DrillsTable: React.FC = observer(() => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [selectedDiameters, setSelectedDiameters] = useState<number[]>([]);
-  const { toggleTheme, isDarkMode } = useTheme(); // Получите функции и состояние темы
 
   useEffect(() => {
     tableStore.getDrills();
@@ -53,42 +51,31 @@ const DrillsTable: React.FC = observer(() => {
       sorter: (a, b) => a.company.toLowerCase().localeCompare(b.company.toLowerCase()),
       sortDirections: ['ascend', 'descend'],
     },
-   {
-  title: 'Изображение',
-  dataIndex: 'image_path',
-  render: (imagePath: string) => {
-    const imageUrl = `http://45.9.73.213:8003/${imagePath}`;
-
-    // Логируем URL изображения для отладки
-    console.log('Image URL:', imageUrl);
-
-    return (
-      <>
-        {imagePath ? (
-          <img
-            src={imageUrl}
-            alt="Изображение не найдено"
-            style={{
-              width: '50px',
-              height: '50px',
-              objectFit: 'contain',
-              borderRadius: '4px',
-              border: '1px solid #e0e0e0',
-            }}
-            onError={(e) => {
-              console.error(`Ошибка загрузки изображения: ${imageUrl}`);
-              e.currentTarget.src = 'path/to/default/image.png'; // Установите путь к изображению по умолчанию
-              e.currentTarget.onerror = null; // Удалите обработчик ошибки, чтобы избежать бесконечной загрузки
-            }}
-          />
-        ) : (
-          <span style={{ color: 'red' }}>Изображение не найдено</span>
-        )}
-      </>
-    );
-  },
-},
-
+    {
+      title: 'Изображение',
+      dataIndex: 'image_path',
+      render: (imagePath: string) => {
+        const imageUrl = `http://45.9.73.213:8003/${imagePath}`;
+        return (
+          <>
+            {imagePath ? (
+              <img
+                src={imageUrl}
+                alt="Изображение не найдено"
+                style={{
+                  width: '50px',
+                  height: '50px',
+                  objectFit: 'contain',
+                  border: '1px solid #e0e0e0',
+                }}
+              />
+            ) : (
+              <span style={{ color: 'red' }}>Изображение не найдено</span>
+            )}
+          </>
+        );
+      },
+    },
   ];
 
   const openFilterDrawer = () => {
@@ -126,19 +113,20 @@ const DrillsTable: React.FC = observer(() => {
         <Button type="primary" onClick={() => tableStore.handleIsBroken()}>{`isBroken ${tableStore.isBroken}`}</Button>
         <Button onClick={openFilterDrawer}>Фильтры</Button>
         <AddDrillForm />
-        <Switch checked={isDarkMode} onChange={toggleTheme} checkedChildren="Тёмная" unCheckedChildren="Светлая" />
       </div>
 
       {/* Индикация активных фильтров */}
       {selectedDiameters.length > 0 && (
         <div style={{ marginBottom: '10px' }}>
           <h4>Применённые фильтры:</h4>
-          {selectedDiameters.map(diameter => (
+          {selectedDiameters.map((diameter) => (
             <Tag key={diameter} color="blue" style={{ marginRight: '5px' }}>
               {diameter} мм
             </Tag>
           ))}
-          <Button type="link" onClick={resetFilter}>Сбросить фильтры</Button>
+          <Button type="link" onClick={resetFilter}>
+            Сбросить фильтры
+          </Button>
         </div>
       )}
 
@@ -153,16 +141,12 @@ const DrillsTable: React.FC = observer(() => {
       />
 
       {/* Drawer для фильтров */}
-      <Drawer
-        title="Фильтрация по диаметрам"
-        placement="right"
-        onClose={closeFilterDrawer}
-        visible={drawerVisible}
-      >
+      <Drawer title="Фильтрация по диаметрам" placement="right" onClose={closeFilterDrawer} open={drawerVisible}>
         <div>
           <h3>Выберите диаметры:</h3>
           <Checkbox.Group
-            options={tableStore.getDiameters()
+            options={tableStore
+              .getDiameters()
               .sort((a, b) => b - a)
               .map((diameter) => ({
                 label: `${diameter} мм`,
@@ -175,7 +159,9 @@ const DrillsTable: React.FC = observer(() => {
 
           <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
             <Button onClick={resetFilter}>Сброс</Button>
-            <Button type="primary" onClick={applyFilter}>Применить фильтр</Button>
+            <Button type="primary" onClick={applyFilter}>
+              Применить фильтр
+            </Button>
           </div>
         </div>
       </Drawer>
