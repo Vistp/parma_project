@@ -1,34 +1,13 @@
-import {Routes, Route, useNavigate} from 'react-router-dom'
-import LoginForm from '../widgets/ui/components/LoginForm.tsx';
-import HomePage from "../pages/HomePage.tsx";
-import ErrorPage from "../pages/ErrorPage.tsx";
-import NotFoundPage from "../pages/NotFoundPage.tsx";
-import {useEffect} from "react";
-import { checkConnectionFunction } from "../shared/utils/checkConnectionFunction.ts";
-import DrillsPage from '../pages/DrillsPage.tsx';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from '../pages/HomePage';
+import LoginForm from '../widgets/ui/components/LoginForm';
+import DrillsPage from '../pages/DrillsPage';
+import ErrorPage from '../pages/ErrorPage';
+import NotFoundPage from '../pages/NotFoundPage';
 
-
-
-// import React, { useEffect } from 'react';
-//
-import { ThemeProvider, useTheme } from '../context/ThemeContext.tsx';
-import { ConfigProvider } from 'antd';
-import Header from '../widgets/ui/components/Header.tsx';
-
-
-function App() {
-  const navigate = useNavigate();
-  const { isDarkMode } = useTheme(); // Получите состояние темы
-
-  useEffect(() => {
-    checkConnectionFunction().then((result) => result === 'OK' ? navigate('/') : navigate('/error'));
-  }, []);
-
+const App = () => {
   return (
-
-    <ThemeProvider>
-      <Header/>
-      <ConfigProvider theme={{ mode: isDarkMode ? 'dark' : 'light' }}>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/auth" element={<LoginForm />} />
@@ -36,9 +15,8 @@ function App() {
         <Route path="/error" element={<ErrorPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </ConfigProvider>
-    </ThemeProvider>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
