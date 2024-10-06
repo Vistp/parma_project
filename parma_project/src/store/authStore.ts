@@ -1,10 +1,10 @@
-import { makeAutoObservable } from "mobx";
-import axios from "axios";
+import { makeAutoObservable } from 'mobx';
+import axios from 'axios';
 
 class AuthStore {
   isLoading = false;
-  error = "";
-  token = "";
+  error = '';
+  token = '';
   isAuthenticated = false;
 
   constructor() {
@@ -13,13 +13,13 @@ class AuthStore {
 
   async register(email: string, password: string) {
     this.setLoading(true);
-    this.setError("");
+    this.setError('');
     try {
-      const response = await axios.post("http://45.9.73.213:8003/auth/register", { email, password });
+      const response = await axios.post('http://45.9.73.213:8003/auth/register', { email, password });
       this.setToken(response.data.token);
       this.isAuthenticated = true;
     } catch (error: any) {
-      this.setError(error.response?.data?.message || "Произошла ошибка регистрации");
+      this.setError(error.response?.data?.message || 'Произошла ошибка регистрации');
     } finally {
       this.setLoading(false);
     }
@@ -28,16 +28,22 @@ class AuthStore {
   async login(username: string, password: string) {
     console.log(username, password);
     this.setLoading(true);
-    this.setError("");
+    this.setError('');
     try {
-      const response = await axios.post("http://45.9.73.213:8003/auth/jwt/login", { username, password }, {headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }});
+      const response = await axios.post(
+        'http://45.9.73.213:8003/auth/jwt/login',
+        { username, password },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
       this.setToken(response.data.token);
       this.isAuthenticated = true;
     } catch (error: any) {
-      this.setError(error.response?.data?.message || "Произошла ошибка входа");
-      console.log(error.response)
+      this.setError(error.response?.data?.message || 'Произошла ошибка входа');
+      console.log(error.response);
     } finally {
       this.setLoading(false);
     }
@@ -49,7 +55,7 @@ class AuthStore {
   }
 
   logout() {
-    this.setToken("");
+    this.setToken('');
     this.isAuthenticated = false;
   }
 
@@ -64,9 +70,9 @@ class AuthStore {
   setToken(token: string) {
     this.token = token;
     if (token) {
-      localStorage.setItem("authToken", token);
+      localStorage.setItem('authToken', token);
     } else {
-      localStorage.removeItem("authToken");
+      localStorage.removeItem('authToken');
     }
   }
 }
