@@ -29,22 +29,43 @@ interface SuccessInterface {
 function AddForm({ onSubmit, onSuccess }: { onSubmit: (values: IFormDrill) => Promise<ErrorInterface | SuccessInterface>, onSuccess: () => void }) {
   const [form] = Form.useForm();
 
+const handleFinish = async (values: any) => {
+    // Преобразуем строковые значения числовых полей в числа
+    const formattedValues = {
+      ...values,
+      diameter: Number(values.diameter),
+      length_xD: Number(values.length_xD),
+      deep_of_drill: Number(values.deep_of_drill),
+    };
+ try {
+      console.log(formattedValues);
+      const result = await onSubmit(formattedValues);
+      console.log('Result: ', result);
+      onSuccess();
+    } catch (error) {
+      alert(`Возникла ошибка при отправке формы: ${(error as ErrorInterface)?.message ?? 'Неизвестная ошибка'}`);
+    }
+  };
+
+
   return (
     <Form
       form={form}
       {...layout}
       name="basic"
       initialValues={{ remember: true, name: '', diameter: 0, length_xD: 0, deep_of_drill: 0, plate: '', key: '', company: '', is_broken: false, storage: '', description: '' }}
-      onFinish={async (values) => {
-        try {
-          console.log(values);
-          const result = await onSubmit(values);
-          console.log('Result: ', result);
-          onSuccess();
-        } catch (error) {
-          alert(`Возникла ошибка при отправке формы: ${(error as ErrorInterface)?.message ?? 'Неизвестная ошибка'}`);
-        }
-      }}
+      onFinish={handleFinish}
+
+//       onFinish={async (values) => {
+//         try {
+//           console.log(values);
+//           const result = await onSubmit(values);
+//           console.log('Result: ', result);
+//           onSuccess();
+//         } catch (error) {
+//           alert(`Возникла ошибка при отправке формы: ${(error as ErrorInterface)?.message ?? 'Неизвестная ошибка'}`);
+//         }
+//       }}
     >
       {/* Поля формы */}
       <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Пожалуйста, введите ваше название!' }]}>
@@ -91,6 +112,8 @@ function AddForm({ onSubmit, onSuccess }: { onSubmit: (values: IFormDrill) => Pr
   );
 }
 
+// const AddModal = ({ updateDrills }: { updateDrills: () => void }) => {
+//   const [modalOpen, setModalOpen] = useState(false); Обновление данных сверл через состояние *1
 const AddModal = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -103,7 +126,9 @@ const AddModal = () => {
   };
 
   const handleSuccess = () => {
-    setModalOpen(false); //
+    setModalOpen(false);
+//     updateDrills(); // Обновление данных сверл через состояние *1
+    window.location.reload(); // Перезагрузка страницы
   };
 
   return (
