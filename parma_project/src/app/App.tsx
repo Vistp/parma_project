@@ -6,6 +6,7 @@ import NotFoundPage from "../pages/NotFoundPage.tsx";
 import {useEffect} from "react";
 import { checkConnectionFunction } from "../shared/utils/checkConnectionFunction.ts";
 import DrillsPage from '../pages/DrillsPage.tsx';
+import { Login } from '../widgets/ui/components/Login.tsx';
 
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
   return (
     <Routes>
         <Route path="/" element={<HomePage />}/>
-        <Route path="/auth" element={<LoginForm />}/>
+        <Route path="/register" element={<LoginForm />}/>
+        <Route path="/login" element={<Login />} />
         <Route path="/drills" element={<DrillsPage />}/>
         <Route path="/error" element={<ErrorPage />}/>
         <Route path="*" element={<NotFoundPage />}/>

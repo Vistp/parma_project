@@ -18,11 +18,11 @@ import { useNavigate } from "react-router-dom";
 import authStore from "../../../store/authStore";
 
 type IFormInput = {
-  email: string;
-  password: string;
+    email: string;
+    password: string;
 };
 
-const useRegisterForm = () => {
+const useLoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -36,16 +36,13 @@ const useRegisterForm = () => {
   ) => {
     event.preventDefault();
   };
-  const handleBack = () => {
-    navigate("/");
-  }
+
   const navigate = useNavigate();
-  
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    await authStore.register(data.email, data.password);
+    await authStore.login(data.email, data.password);
     if (!authStore.error) {
-      navigate("/login");
+      navigate("/"); // Путь к основной странице сайта
     }
   };
 
@@ -56,7 +53,6 @@ const useRegisterForm = () => {
     showPassword,
     handleClickShowPassword,
     handleMouseDownPassword,
-    handleBack,
     onSubmit,
     navigate,
   };
@@ -75,7 +71,7 @@ const inputStyles = {
   },
 };
 
-const Register: React.FC = observer(() => {
+const Login: React.FC = observer(() => {
   const {
     register,
     handleSubmit,
@@ -83,10 +79,9 @@ const Register: React.FC = observer(() => {
     showPassword,
     handleClickShowPassword,
     handleMouseDownPassword,
-    handleBack,
     onSubmit,
     navigate,
-  } = useRegisterForm();
+  } = useLoginForm();
 
   return (
     <Container
@@ -100,11 +95,10 @@ const Register: React.FC = observer(() => {
         height: "100vh",
       }}
     >
-      <Button onClick={handleBack}>Назад</Button>
       <Paper elevation={3} sx={{ padding: 4, width: "100%" }}>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="h4" gutterBottom align="center">
-            Регистрация
+            Авторизация
           </Typography>
           <TextField
             label="Email"
@@ -157,7 +151,7 @@ const Register: React.FC = observer(() => {
             {authStore.isLoading ? (
               <CircularProgress size={24} sx={{ color: "white" }} />
             ) : (
-              "Регистрация"
+              "Войти"
             )}
           </Button>
           {authStore.error && (
@@ -166,12 +160,12 @@ const Register: React.FC = observer(() => {
             </Typography>
           )}
           <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-            Уже есть аккаунт?{" "}
+            Нет аккаунта?{" "}
             <Link
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/register")}
               sx={{ textDecoration: "none", cursor: "pointer" }}
             >
-              Войти
+              Регистрация
             </Link>
           </Typography>
         </Box>
@@ -180,4 +174,4 @@ const Register: React.FC = observer(() => {
   );
 });
 
-export default Register;
+export { Login };

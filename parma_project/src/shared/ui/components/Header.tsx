@@ -5,7 +5,7 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    navigate('/auth');
+    navigate('/register');
   }
   const handleLogoClick = () => {
     navigate('/')

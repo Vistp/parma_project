@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Dialog } from '@mui/material';
-import LoginForm from './LoginForm';
+import Register from './LoginForm';
 
 export const RegistrationForm: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -19,8 +19,9 @@ export const RegistrationForm: React.FC = () => {
         Login
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <LoginForm />
+        <Register />
       </Dialog>
     </>
   );
 };
+
