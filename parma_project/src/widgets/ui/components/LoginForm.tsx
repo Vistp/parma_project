@@ -17,6 +17,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import authStore from "../../../store/authStore";
 
+
 type IFormInput = {
   email: string;
   password: string;
@@ -37,6 +38,7 @@ const useRegisterForm = () => {
     event.preventDefault();
   };
   const handleBack = () => {
+
     navigate("/");
   }
   const navigate = useNavigate();

@@ -23,3 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+
+
+#python
+../node_modules/
+../venv/
+../.idea/
