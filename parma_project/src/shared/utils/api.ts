@@ -14,9 +14,9 @@ export const getData = async (endpoint: string = '') => {
 export const addDrill = async (values: IFormDrill) => {
   const body = {
     name: values.name,
-    diameter: values.diameter,
-    length_xD: values.length_xD,
-    deep_of_drill: values.deep_of_drill,
+    diameter: Number(values.diameter),
+    length_xD: Number(values.length_xD),
+    deep_of_drill: Number(values.deep_of_drill),
     plate: values.plate,
     key: values.key,
     company: values.company,

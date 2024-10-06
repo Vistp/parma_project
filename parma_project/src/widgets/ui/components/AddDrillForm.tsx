@@ -1,6 +1,7 @@
 import { Form, Input, Button, Modal, Select } from 'antd';
 import { useState } from 'react';
 import { addDrill } from '../../../shared/utils/api';
+import tableStore from '../../../store/tableStore';
 
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 16 } };
 const tailLayout = { wrapperCol: { offset: 6, span: 16 } };
@@ -103,7 +104,8 @@ const AddModal = () => {
   };
 
   const handleSuccess = () => {
-    setModalOpen(false); //
+    setModalOpen(false);
+    tableStore.getDrills();
   };
 
   return (

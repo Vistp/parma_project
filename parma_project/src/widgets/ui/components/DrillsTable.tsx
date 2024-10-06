@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import tableStore from '../../../store/tableStore';
 import { IDrill } from '../../../shared/types/types';
 import AddDrillForm from './AddDrillForm';
+import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
 
 const DrillsTable: React.FC = observer(() => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -70,7 +71,7 @@ const DrillsTable: React.FC = observer(() => {
                 }}
               />
             ) : (
-              <span style={{ color: 'red' }}>Изображение не найдено</span>
+              <NoPhotographyOutlinedIcon fontSize='large' />
             )}
           </>
         );

@@ -1,12 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Container,
-} from '@mui/material';
+import { Box, TextField, Button, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 interface FormData {
@@ -16,17 +10,20 @@ interface FormData {
 }
 
 const LoginForm: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
   const navigate = useNavigate();
 
   const onSubmit = (data: FormData) => {
-    
     // TODO: добавить логику авторизации
   };
 
   const handleBack = () => {
-    navigate("/");
-  }
+    navigate('/');
+  };
 
   return (
     <Container component="main" maxWidth="sm">
@@ -53,7 +50,7 @@ const LoginForm: React.FC = () => {
             required
             fullWidth
             label="Логин"
-            {...register('username', { required: "Логин является обязательным" })}
+            {...register('username', { required: 'Логин является обязательным' })}
             error={!!errors.username}
             helperText={errors.username?.message}
           />
@@ -64,11 +61,11 @@ const LoginForm: React.FC = () => {
             label="Email"
             type="email"
             {...register('email', {
-              required: "Email является обязательным",
+              required: 'Email является обязательным',
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Введите корректный email",
-              }
+                message: 'Введите корректный email',
+              },
             })}
             error={!!errors.email}
             helperText={errors.email?.message}
@@ -80,22 +77,16 @@ const LoginForm: React.FC = () => {
             label="Пароль"
             type="password"
             {...register('password', {
-              required: "Пароль является обязательным",
+              required: 'Пароль является обязательным',
               minLength: {
                 value: 6,
-                message: "Пароль должен содержать не менее 6 символов",
+                message: 'Пароль должен содержать не менее 6 символов',
               },
             })}
             error={!!errors.password}
             helperText={errors.password?.message}
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={{ mt: 3, mb: 2 }}
-          >
+          <Button type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 3, mb: 2 }}>
             Войти
           </Button>
         </Box>
