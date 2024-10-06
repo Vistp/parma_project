@@ -8,21 +8,37 @@ import { checkConnectionFunction } from "../shared/utils/checkConnectionFunction
 import DrillsPage from '../pages/DrillsPage.tsx';
 
 
+
+// import React, { useEffect } from 'react';
+//
+import { ThemeProvider, useTheme } from '../context/ThemeContext.tsx';
+import { ConfigProvider } from 'antd';
+import Header from '../widgets/ui/components/Header.tsx';
+
+
 function App() {
-    const navigate = useNavigate();
-    useEffect(() => {
-        checkConnectionFunction().then((result) => result == 'OK' ? navigate('/') : navigate('/error'))
-    },[])
+  const navigate = useNavigate();
+  const { isDarkMode } = useTheme(); // Получите состояние темы
+
+  useEffect(() => {
+    checkConnectionFunction().then((result) => result === 'OK' ? navigate('/') : navigate('/error'));
+  }, []);
 
   return (
-    <Routes>
-        <Route path="/" element={<HomePage />}/>
-        <Route path="/auth" element={<LoginForm />}/>
-        <Route path="/drills" element={<DrillsPage />}/>
-        <Route path="/error" element={<ErrorPage />}/>
-        <Route path="*" element={<NotFoundPage />}/>
-    </Routes>
-  )
+
+    <ThemeProvider>
+      <Header/>
+      <ConfigProvider theme={{ mode: isDarkMode ? 'dark' : 'light' }}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/auth" element={<LoginForm />} />
+        <Route path="/drills" element={<DrillsPage />} />
+        <Route path="/error" element={<ErrorPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </ConfigProvider>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
