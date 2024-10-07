@@ -8,6 +8,11 @@ export default defineConfig({
     host: '0.0.0.0',  
     port: 5173,       
   },
+  base: './',
+  build: {
+    outDir: './docs',
+    emptyOutDir: true,
+  },
   resolve: {
     alias: {
       app: '/src/app',
