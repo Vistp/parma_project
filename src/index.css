@@ -1,0 +1,101 @@
+/* body {
+  --main-background-color: #ffffff;
+  --main-text-color: #000536;
+}
+
+body.dark {
+  --main-background-color: #393939;
+  --main-text-color: #c5c5c5;
+}
+
+.home {
+  height: 100vh;
+  background-color: var(--main-background-color);
+}
+
+.dark {
+  --main-background-color: #393939;
+  --main-text-color: #c5c5c5;
+} */
+
+:root {
+  /* Светлая тема */
+  --theme-light-background: #fff;
+  --theme-light-text: #000;
+  
+  /* Тёмная тема */
+  --theme-dark-background: #121212;
+  --theme-dark-text: #fff;
+}
+
+body {
+  background-color: var(--theme-light-background);
+  color: var(--theme-light-text);
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: var(--theme-light-text);
+}
+
+.MuiInputBase-input {
+  color: var(--theme-light-text);
+}
+
+.MuiSelect-icon {
+  fill: var(--theme-light-text);
+}
+
+.MuiInputBase-input:hover,
+.MuiInputBase-input:focus,
+.MuiInputBase-input:active:not(:disabled),
+.MuiInputBase-input:active:not(:disabled) + .MuiOutlinedInput-notchedOutline {
+  border-color: var(--theme-light-text);
+  box-shadow: none;
+}
+
+.MuiInputBase-input:hover,
+.MuiInputBase-input:focus,
+.MuiInputBase-input:active:not(:disabled) {
+  background-color: rgba(var(--theme-light-text), 0.1);
+}
+
+.MuiInputBase-input:active:not(:disabled) + .MuiOutlinedInput-notchedOutline {
+  border-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--theme-dark-background);
+    color: var(--theme-dark-text);
+  }
+
+  .MuiOutlinedInput-notchedOutline {
+    border-color: var(--theme-dark-text);
+  }
+
+  .MuiInputBase-input {
+    color: var(--theme-dark-text);
+  }
+
+  .MuiSelect-icon {
+    fill: var(--theme-dark-text);
+  }
+
+  .MuiInputBase-input:hover,
+  .MuiInputBase-input:focus,
+  .MuiInputBase-input:active:not(:disabled),
+  .MuiInputBase-input:active:not(:disabled) + .MuiOutlinedInput-notchedOutline {
+    border-color: var(--theme-dark-text);
+    box-shadow: none;
+  }
+
+  .MuiInputBase-input:hover,
+  .MuiInputBase-input:focus,
+  .MuiInputBase-input:active:not(:disabled) {
+    background-color: rgba(var(--theme-dark-text), 0.1);
+  }
+
+  .MuiInputBase-input:active:not(:disabled) + .MuiOutlinedInput-notchedOutline {
+    border-color: transparent;
+  }
+}
