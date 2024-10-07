@@ -27,6 +27,4 @@ dist-ssr
 
 
 #python
-../node_modules/
-../venv/
-../.idea/
+venv
