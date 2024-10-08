@@ -36,13 +36,16 @@ const useLoginForm = () => {
   ) => {
     event.preventDefault();
   };
+  const handleBack = () => {
+    navigate("/");
+  }
 
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     await authStore.login(data.email, data.password);
     if (!authStore.error) {
-      navigate("/"); // Путь к основной странице сайта
+      navigate("/");
     }
   };
 
@@ -53,6 +56,7 @@ const useLoginForm = () => {
     showPassword,
     handleClickShowPassword,
     handleMouseDownPassword,
+    handleBack,
     onSubmit,
     navigate,
   };
@@ -79,6 +83,7 @@ const Login: React.FC = observer(() => {
     showPassword,
     handleClickShowPassword,
     handleMouseDownPassword,
+    handleBack,
     onSubmit,
     navigate,
   } = useLoginForm();
@@ -95,6 +100,7 @@ const Login: React.FC = observer(() => {
         height: "100vh",
       }}
     >
+      <Button onClick={handleBack} sx={{ marginBottom: 4}}>Назад</Button>
       <Paper elevation={3} sx={{ padding: 4, width: "100%" }}>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="h4" gutterBottom align="center">
@@ -174,4 +180,4 @@ const Login: React.FC = observer(() => {
   );
 });
 
-export { Login };
+export default Login;
