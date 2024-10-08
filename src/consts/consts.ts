@@ -1,4 +1,4 @@
 export const endpoints = {
-  drills: 'api/drills',
-  drill: 'api/drill'
+  drills: 'drills',
+  drill: 'drill'
 }
