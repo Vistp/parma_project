@@ -1,10 +1,9 @@
 import { createRoot } from 'react-dom/client';
-import CssBaseline from '@mui/material/CssBaseline';
 import App from './app/App';
+import { ThemeContextProvaider } from 'app/ThemeContextProvaider';
 
 createRoot(document.getElementById('root')!).render(
-  <>
-    <CssBaseline />
+  <ThemeContextProvaider>
     <App />
-  </>,
+  </ThemeContextProvaider>,
 );

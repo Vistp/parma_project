@@ -5,6 +5,8 @@ import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined
 import tableStore from 'store/tableStore';
 import { IDrill } from 'types/types';
 import AddDrillForm from './AddDrillForm';
+import { useThemeContext } from 'app/ThemeContextProvaider';
+import 'app/index.css'
 
 const DrillsTable: React.FC = observer(() => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -108,17 +110,19 @@ const DrillsTable: React.FC = observer(() => {
     console.log('params', sorter, extra);
   };
 
+  const { mode } = useThemeContext(); // тема 'light' или 'dark'
+
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
         <Button type="primary" onClick={() => tableStore.handleIsBroken()}>{`isBroken ${tableStore.isBroken}`}</Button>
-        <Button onClick={openFilterDrawer}>Фильтры</Button>
+        <Button type="primary" onClick={openFilterDrawer}>Фильтры</Button>
         <AddDrillForm />
       </div>
 
       {/* Индикация активных фильтров */}
       {selectedDiameters.length > 0 && (
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{ marginBottom: '5px' }}>
           <h4>Применённые фильтры:</h4>
           {selectedDiameters.map((diameter) => (
             <Tag key={diameter} color="blue" style={{ marginRight: '5px' }}>
@@ -132,17 +136,17 @@ const DrillsTable: React.FC = observer(() => {
       )}
 
       <Table<IDrill>
+        className={mode === 'light' ? 'light-theme' : 'dark-theme'}
         rowKey={'id'}
         columns={columns}
         dataSource={filteredData}
         onChange={onChange}
-        loading={!tableStore.drills.length}
         scroll={{ y: 55 * 5 }}
         pagination={false}
       />
 
       {/* Drawer для фильтров */}
-      <Drawer title="Фильтрация по диаметрам" placement="right" onClose={closeFilterDrawer} open={drawerVisible}>
+      <Drawer title="Фильтрация по диаметрам" placement="right" onClose={closeFilterDrawer} open={drawerVisible} className={mode === 'light' ? 'light-theme' : 'dark-theme'}>
         <div>
           <h3>Выберите диаметры:</h3>
           <Checkbox.Group

@@ -1,6 +1,6 @@
 import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { Theming } from './Theming';
+import NightModeToggle from './NightModeToggle';
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export const Header: React.FC = () => {
         <Typography variant="h6" component="p" onClick={handleLogoClick} sx={{ flexGrow: 1, cursor: 'pointer' }}>
           Tool Manager
         </Typography>
-        <Theming />
+        <NightModeToggle />
         <Button onClick={handleLogin} sx={{ color: 'white' }}>
           Login
         </Button>

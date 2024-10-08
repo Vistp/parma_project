@@ -9,8 +9,8 @@ const DrillsPage: React.FC = () => {
     return (
         <div>
             <Header />
+            <ToolsDropdown activeTool={activeItem} />
             <Container>
-            <ToolsDropdown activeTool={activeItem}/>
                 <DrillsTable />
             </Container>
         </div>

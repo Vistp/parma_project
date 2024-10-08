@@ -1,17 +1,9 @@
-import { createTheme } from "@mui/material/styles";
+import {  blue } from "@mui/material/colors";
 
-const theme = createTheme({
-  typography: {
-    fontFamily: "Inter, Arial, sans-serif",
-  },
+const theme = {
   palette: {
-    primary: {
-      main: "#1976d2",
-    },
-    secondary: {
-      main: "#dc004e",
-    },
+    primary: blue,
   },
-});
+}
 
 export default theme;

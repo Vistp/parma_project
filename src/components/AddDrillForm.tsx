@@ -1,4 +1,5 @@
 import { Form, Input, Button, Modal, Select } from 'antd';
+import { useThemeContext } from 'app/ThemeContextProvaider';
 import { useState } from 'react';
 import tableStore from 'store/tableStore';
 import { addDrill } from 'utils/api';
@@ -36,8 +37,11 @@ function AddForm({
 }) {
   const [form] = Form.useForm();
 
+  const { mode } = useThemeContext(); // тема 'light' или 'dark'
+
   return (
     <Form
+      className={mode === 'light' ? 'light-theme' : 'dark-theme'}
       form={form}
       {...layout}
       name="basic"
@@ -150,12 +154,14 @@ const AddModal = () => {
     tableStore.getDrills();
   };
 
+  const { mode } = useThemeContext(); // тема 'light' или 'dark'
+
   return (
     <>
       <Button type="primary" onClick={showModal}>
         Добавить сверло
       </Button>
-      <Modal title="Добавление сверло" open={modalOpen} footer={null} onCancel={handleCancel}>
+      <Modal className={mode === 'light' ? 'light-theme' : 'dark-theme'} title="Добавление сверла" open={modalOpen} footer={null} onCancel={handleCancel}>
         <AddForm onSubmit={addDrill} onSuccess={handleSuccess} />
       </Modal>
     </>

@@ -24,7 +24,7 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({ activeTool }) => {
 
   return (
     <>
-      <FormControl fullWidth variant="outlined" sx={{ width: '200px', mt: 2, mb: 2 }}>
+      <FormControl fullWidth variant="outlined" sx={{ width: '200px', m: '10px' }}>
         <InputLabel id="tools-dropdown-label">Инструменты</InputLabel>
         <Select labelId="tools-dropdown-label" value={selectedTool} onChange={handleChange} label="Инструменты">
           <MenuItem value="drills" onClick={() => navigate('/drills')}>
