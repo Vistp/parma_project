@@ -37,7 +37,6 @@ const useRegisterForm = () => {
     event.preventDefault();
   };
   const handleBack = () => {
-
     navigate("/");
   }
   const navigate = useNavigate();
@@ -101,7 +100,7 @@ const Register: React.FC = observer(() => {
         height: "100vh",
       }}
     >
-      <Button onClick={handleBack}>Назад</Button>
+      <Button onClick={handleBack} sx={{ marginBottom: 4}}>Назад</Button>
       <Paper elevation={3} sx={{ padding: 4, width: "100%" }}>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="h4" gutterBottom align="center">

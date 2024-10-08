@@ -26,7 +26,6 @@ class AuthStore {
   }
 
   async login(username: string, password: string) {
-    console.log(username, password);
     this.setLoading(true);
     this.setError('');
     try {
@@ -43,7 +42,6 @@ class AuthStore {
       this.isAuthenticated = true;
     } catch (error: any) {
       this.setError(error.response?.data?.message || 'Произошла ошибка входа');
-      console.log(error.response);
     } finally {
       this.setLoading(false);
     }
