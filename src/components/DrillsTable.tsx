@@ -58,7 +58,7 @@ const DrillsTable: React.FC = observer(() => {
       title: 'Изображение',
       dataIndex: 'image_path',
       render: (imagePath: string) => {
-        const imageUrl = `http://45.9.73.213:8003/${imagePath}`;
+        const imageUrl = `${import.meta.env.VITE_BASE_URL}${imagePath}`;
         return (
           <>
             {imagePath ? (
