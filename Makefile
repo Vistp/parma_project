@@ -1,15 +1,28 @@
-#front
-frun:
-	npm install && npm  run dev
-fbuild_on_server:
-	npm install && export NODE_OPTIONS=--max-old-space-size=4096 && npm run build && cd docs && npm  run dev
+#install and run
+runf:
+	npm install && npm run dev
+
+#build and run, start at root dir
+buildf:
+	npm install && npm run build && mkdir -p docs && cd docs && npm run dev
+
+#build and run
+buildrf:
+	npm install && export NODE_OPTIONS=--max-old-space-size=4096 && npm run build && cd docs && npm run dev
 	mkdir -p /var/www/html
 	cp -r /root/projects/parma_project/docs/* /var/www/html/
 	nginx -t && rc-service nginx restart && nginx -s reload && rc-service nginx status
 
+#run after pull
+runf:
+	mkdir -p /var/www/html
+    cp -r /root/projects/parma_project/docs/* /var/www/html/
+    #alpine
+    nginx -t && rc-service nginx restart && nginx -s reload && rc-service nginx status
 
-#nginx
-nginx_reload:
+
+#check, restart, reload, see status
+nginxr:
 	nginx -t && rc-service nginx restart && nginx -s reload && rc-service nginx status
 
 
@@ -19,6 +32,6 @@ check_front:
 check_api:
 	curl  https://gas159.ru/api/
 
-#docs
+#run build package local
 serve:
 	serve -s
