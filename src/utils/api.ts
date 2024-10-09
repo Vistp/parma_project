@@ -6,6 +6,7 @@ import { IFormDrill } from 'types/types';
 export const getData = async (endpoint: string = '') => {
   try {
     const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoint}?broken=${tableStore.isBroken}`);
+    console.log(res.data)
     return res.data;
   } catch (error) {
     console.log(error);
