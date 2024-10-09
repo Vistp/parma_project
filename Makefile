@@ -14,15 +14,14 @@ buildrf:
 	nginx -t && rc-service nginx restart && nginx -s reload && rc-service nginx status
 
 #run after pull
-runf:
+cp_nginx:
 	mkdir -p /var/www/html
     cp -r /root/projects/parma_project/docs/* /var/www/html/
-    #alpine
     nginx -t && rc-service nginx restart && nginx -s reload && rc-service nginx status
 
 
 #check, restart, reload, see status
-nginxr:
+nginx:
 	nginx -t && rc-service nginx restart && nginx -s reload && rc-service nginx status
 
 
