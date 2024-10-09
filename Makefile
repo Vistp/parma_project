@@ -16,8 +16,8 @@ buildrf:
 #run after pull
 cp_nginx:
 	mkdir -p /var/www/html
-    cp -r /root/projects/parma_project/docs/* /var/www/html/
-    nginx -t && rc-service nginx restart && nginx -s reload && rc-service nginx status
+	cp -r /root/projects/parma_project/docs/* /var/www/html/
+	nginx -t && rc-service nginx restart && nginx -s reload && rc-service nginx status
 
 
 #check, restart, reload, see status
