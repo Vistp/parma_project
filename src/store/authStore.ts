@@ -15,7 +15,7 @@ class AuthStore {
     this.setLoading(true);
     this.setError('');
     try {
-      const response = await axios.post('http://45.9.73.213:8003/auth/register', { email, password });
+      const response = await axios.post('https://gas159.ru/api/auth/register', { email, password });
       this.setToken(response.data.token);
       this.isAuthenticated = true;
     } catch (error: any) {
@@ -30,7 +30,7 @@ class AuthStore {
     this.setError('');
     try {
       const response = await axios.post(
-        'http://45.9.73.213:8003/auth/jwt/login',
+        'https://gas159.ru/api/auth/jwt/login',
         { username, password },
         {
           headers: {
