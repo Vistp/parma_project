@@ -18,3 +18,7 @@ check_front:
 	curl -I https://gas159.ru
 check_api:
 	curl  https://gas159.ru/api/
+
+#docs
+serve:
+	serve -s
