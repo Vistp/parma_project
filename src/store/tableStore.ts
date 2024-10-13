@@ -6,7 +6,8 @@ import { getData } from 'utils/api';
 class TableStore {
   drills: IDrill[] = [];
   isBroken: boolean = false;
-  idDrill: number = 32;
+  idDrillEdit: number = 1;
+  idDrillDescription: number = 1;
 
   constructor() {
     makeAutoObservable(this);
@@ -24,6 +25,15 @@ class TableStore {
   handleIsBroken(): void {
     this.isBroken = !this.isBroken;
     this.getDrills();
+  }
+
+  getDrillIdEdit(id: number): void {
+    this.idDrillEdit = id;
+    console.log(this.idDrillEdit);
+  }
+
+  getDrillIdDescription(id: number): void {
+    this.idDrillDescription = id;
   }
 }
 

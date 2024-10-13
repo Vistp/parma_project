@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { endpoints } from 'consts/consts';
 import tableStore from 'store/tableStore';
 import { IFormDrill } from 'types/types';
 
@@ -35,8 +36,7 @@ export const addDrill = async (values: IFormDrill) => {
   //     formData.append('image_2', image2File);  // Передача файла
   //     formData.append('image_3', image3File);  // Передача файла
   try {
-    // Отправляем POST запрос с FormData
-    const response = await axios.post('http://45.9.73.213:8003/api/drill/create', formData, {
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}${endpoints.createDrill}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -51,3 +51,19 @@ export const addDrill = async (values: IFormDrill) => {
     throw error;
   }
 };
+
+export const deleteDrill = async (id: number) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+    const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}${endpoints.deleteDrill}${id}`,config);
+    tableStore.getDrills();
+    alert(`Успешно удалил сверло с ID ${id}`)
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

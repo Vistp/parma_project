@@ -7,6 +7,10 @@ import { IDrill } from 'types/types';
 import AddDrillForm from './AddDrillForm';
 import { useThemeContext } from 'app/ThemeContextProvaider';
 import 'app/index.css'
+import { IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { deleteDrill } from 'utils/api';
 
 const DrillsTable: React.FC = observer(() => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -55,6 +59,26 @@ const DrillsTable: React.FC = observer(() => {
       sortDirections: ['ascend', 'descend'],
     },
     {
+      title: 'Винты',
+      render: (_value, record) => (
+        <select defaultValue="Винты">
+          {record.screws?.map(({ type }) => (
+            <option key={type}>{type}</option>
+          ))}
+        </select>
+      )
+    },
+    {
+      title: 'Пластины',
+      render: (_value, record) => (
+        <select defaultValue="Пластины">
+          {record.plates?.map(({ type }) => (
+            <option key={type}>{type}</option>
+          ))}
+        </select>
+      )
+    },
+    {
       title: 'Изображение',
       dataIndex: 'image_path',
       render: (imagePath: string) => {
@@ -79,6 +103,19 @@ const DrillsTable: React.FC = observer(() => {
         );
       },
     },
+    {
+      title: 'Действия',
+      render: (_text, record) => (
+        <>
+          <IconButton edge="start" color="inherit" onClick={() => tableStore.getDrillIdEdit(record.id)}>
+            <EditIcon /> 
+          </IconButton>
+          <IconButton edge="end" color="inherit" onClick={() => deleteDrill(record.id)}>
+            <DeleteIcon />
+          </IconButton>
+        </>
+      )
+    }
   ];
 
   const openFilterDrawer = () => {
@@ -114,6 +151,7 @@ const DrillsTable: React.FC = observer(() => {
 
   return (
     <>
+      {/* Панель кнопок над таблицей*/}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
         <Button type="primary" onClick={() => tableStore.handleIsBroken()}>{`isBroken ${tableStore.isBroken}`}</Button>
         <Button type="primary" onClick={openFilterDrawer}>Фильтры</Button>
@@ -143,6 +181,10 @@ const DrillsTable: React.FC = observer(() => {
         onChange={onChange}
         scroll={{ y: 55 * 5 }}
         pagination={false}
+        onRow={(record) => ({
+          onClick: () => tableStore.getDrillIdDescription(record.id),
+          style: { cursor: 'pointer' }
+        })}
       />
 
       {/* Drawer для фильтров */}
@@ -161,7 +203,6 @@ const DrillsTable: React.FC = observer(() => {
             value={selectedDiameters}
             style={{ display: 'flex', flexDirection: 'column' }}
           />
-
           <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
             <Button onClick={resetFilter}>Сброс</Button>
             <Button type="primary" onClick={applyFilter}>
