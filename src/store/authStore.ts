@@ -5,7 +5,8 @@ import axios from 'axios';
 class AuthStore {
   isLoading = false;
   error = '';
-  isAuthenticated = false;
+  email = localStorage.getItem('authEmail') || '';
+  isAuthenticated = Boolean(this.email);
 
   constructor() {
     makeAutoObservable(this);
@@ -37,6 +38,7 @@ class AuthStore {
           },
         },
       );
+      this.setEmail(username);
       this.isAuthenticated = true;
     } catch (error: any) {
       this.setError(error.response?.data?.detail || 'Произошла ошибка входа');
@@ -47,6 +49,7 @@ class AuthStore {
   
   logout() {
     this.isAuthenticated = false;
+    localStorage.removeItem('authEmail');
   }
 
   setLoading(value: boolean) {
@@ -55,6 +58,11 @@ class AuthStore {
 
   setError(message: string) {
     this.error = message;
+  }
+  
+  setEmail(email: string) {
+    this.email = email;
+    localStorage.setItem('authEmail', email);
   }
 }
 
