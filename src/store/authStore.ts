@@ -1,11 +1,12 @@
+import { endpoints } from 'consts/consts';
 import { makeAutoObservable } from 'mobx';
 import axios from 'axios';
 
 class AuthStore {
   isLoading = false;
   error = '';
-  token = '';
-  isAuthenticated = false;
+  email = localStorage.getItem('authEmail') || '';
+  isAuthenticated = Boolean(this.email);
 
   constructor() {
     makeAutoObservable(this);
@@ -15,11 +16,10 @@ class AuthStore {
     this.setLoading(true);
     this.setError('');
     try {
-      const response = await axios.post('https://gas159.ru/api/auth/register', { email, password });
-      this.setToken(response.data.token);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}${endpoints.register}`, { email, password });
       this.isAuthenticated = true;
     } catch (error: any) {
-      this.setError(error.response?.data?.message || 'Произошла ошибка регистрации');
+      this.setError(error.response?.data?.detail || 'Произошла ошибка регистрации');
     } finally {
       this.setLoading(false);
     }
@@ -29,8 +29,8 @@ class AuthStore {
     this.setLoading(true);
     this.setError('');
     try {
-      const response = await axios.post(
-        'https://gas159.ru/api/auth/jwt/login',
+      await axios.post(
+        `${import.meta.env.VITE_BASE_URL}${endpoints.login}`,
         { username, password },
         {
           headers: {
@@ -38,23 +38,18 @@ class AuthStore {
           },
         },
       );
-      this.setToken(response.data.token);
+      this.setEmail(username);
       this.isAuthenticated = true;
     } catch (error: any) {
-      this.setError(error.response?.data?.message || 'Произошла ошибка входа');
+      this.setError(error.response?.data?.detail || 'Произошла ошибка входа');
     } finally {
       this.setLoading(false);
     }
   }
-
-  loginWithToken(token: string) {
-    this.setToken(token);
-    this.isAuthenticated = true;
-  }
-
+  
   logout() {
-    this.setToken('');
     this.isAuthenticated = false;
+    localStorage.removeItem('authEmail');
   }
 
   setLoading(value: boolean) {
@@ -64,14 +59,10 @@ class AuthStore {
   setError(message: string) {
     this.error = message;
   }
-
-  setToken(token: string) {
-    this.token = token;
-    if (token) {
-      localStorage.setItem('authToken', token);
-    } else {
-      localStorage.removeItem('authToken');
-    }
+  
+  setEmail(email: string) {
+    this.email = email;
+    localStorage.setItem('authEmail', email);
   }
 }
 
