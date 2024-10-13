@@ -62,8 +62,8 @@ const DrillsTable: React.FC = observer(() => {
       title: 'Винты',
       render: (_value, record) => (
         <select defaultValue="Винты">
-          {record.screws?.map(({ type }) => (
-            <option key={type}>{type}</option>
+          {record.screws?.map((screw) => (
+            <option key={screw.id}>{screw.type}</option>
           ))}
         </select>
       )
@@ -72,8 +72,8 @@ const DrillsTable: React.FC = observer(() => {
       title: 'Пластины',
       render: (_value, record) => (
         <select defaultValue="Пластины">
-          {record.plates?.map(({ type }) => (
-            <option key={type}>{type}</option>
+          {record.plates?.map((plate) => (
+            <option key={plate.id}>{plate.type}</option>
           ))}
         </select>
       )

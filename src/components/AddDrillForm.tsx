@@ -1,8 +1,11 @@
 import { Form, Input, Button, Modal, Select } from 'antd';
 import { useThemeContext } from 'app/ThemeContextProvaider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import tableStore from 'store/tableStore';
+import { IPlate, IScrew } from 'types/types';
 import { addDrill } from 'utils/api';
+import { getPlates } from 'utils/apiPlates';
+import { getScrews } from 'utils/apiScrews';
 
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 16 } };
 const tailLayout = { wrapperCol: { offset: 6, span: 16 } };
@@ -12,10 +15,11 @@ interface IFormDrill {
   diameter: number;
   length_xD: number;
   deep_of_drill: number;
-  plate: string;
+  plate: number;
   key: string;
   company: string;
   is_broken: boolean;
+  screws: number;
   storage: string;
   description: string;
 }
@@ -35,6 +39,24 @@ function AddForm({
   onSubmit: (values: IFormDrill) => Promise<ErrorInterface | SuccessInterface>;
   onSuccess: () => void;
 }) {
+  const [screws, setScrews] = useState<IScrew[]>([]);
+  const [plates, setPlates] = useState<IPlate[]>([]);
+
+
+  useEffect(() => {
+    const getAllScrews = async () => {
+      const res = await getScrews();
+      setScrews(res)
+    }
+    const getAllPlates = async () => {
+      const res = await getPlates();
+      setPlates(res)
+    }
+
+    getAllPlates();
+    getAllScrews();
+  }, []);
+
   const [form] = Form.useForm();
 
   const { mode } = useThemeContext(); // тема 'light' или 'dark'
@@ -47,16 +69,15 @@ function AddForm({
       name="basic"
       initialValues={{
         remember: true,
-        name: '',
-        diameter: 0,
-        length_xD: 0,
-        deep_of_drill: 0,
-        plate: '',
-        key: '',
-        company: '',
+        name: 'new',
+        diameter: 0.5,
+        length_xD: 10,
+        deep_of_drill: 10,
+        key: 'newKey',
+        company: 'newCompany',
         is_broken: false,
-        storage: '',
-        description: '',
+        storage: 'newStorage',
+        description: 'hello',
       }}
       onFinish={async (values) => {
         try {
@@ -86,13 +107,6 @@ function AddForm({
       >
         <Input type="number" placeholder="Пожалуйста, введите глубину сверления" />
       </Form.Item>
-      <Form.Item
-        label="Пластина"
-        name="plate"
-        rules={[{ required: true, message: 'Пожалуйста, введите название пластины!' }]}
-      >
-        <Input placeholder="Пожалуйста, введите название пластины" />
-      </Form.Item>
       <Form.Item label="Ключ" name="key" rules={[{ required: true, message: 'Пожалуйста, введите название ключа!' }]}>
         <Input placeholder="Пожалуйста, введите название ключа" />
       </Form.Item>
@@ -108,9 +122,31 @@ function AddForm({
         name="is_broken"
         rules={[{ required: true, message: 'Пожалуйста, выберите состояние!' }]}
       >
-        <Select style={{ width: 120 }}>
+        <Select style={{ width: '100%' }}>
           <Select.Option value={false}>Исправно</Select.Option>
           <Select.Option value={true}>Сломанно</Select.Option>
+        </Select>
+      </Form.Item>
+      <Form.Item
+        label="Винты"
+        name="screws"
+        rules={[{ required: true, message: 'Пожалуйста, выберите винт!' }]}
+      >
+        <Select mode="multiple" style={{ width: '100%' }} placeholder="Выберите винт...">
+          {screws.map(screw => (
+            <Select.Option key={screw.id} value={screw.id}>{screw.type}</Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <Form.Item
+        label="Пластины"
+        name="plates"
+        rules={[{ required: true, message: 'Пожалуйста, выберите винт(ы)!' }]}
+      >
+        <Select mode="multiple" style={{ width: '100%' }} placeholder="Выберите пластину...">
+          {plates.map(plate => (
+            <Select.Option key={plate.id} value={plate.id}>{plate.type}</Select.Option>
+          ))}
         </Select>
       </Form.Item>
       <Form.Item
