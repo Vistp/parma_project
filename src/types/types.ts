@@ -3,7 +3,8 @@
     diameter?: number;
     length_xD?: number;
     deep_of_drill?: number;
-    plate?: string;
+    plates?: number;
+    screws?: number;
     key?: string;
     company?: string;
     is_broken?: boolean;
@@ -56,3 +57,29 @@ export interface IPlate {
     update_at?: string;
   }
   
+  export interface IScrew {
+    id: number;
+    type: string;
+    length: number;
+    thread: string;
+    step_of_thread: number;
+    company: string;
+    description: string;
+    image_path: string;
+    create_at: string;
+    update_at: string
+  }
+
+  export interface IPlate {
+    type: string;
+    sub_type: string;
+    material: string;
+    amount: number;
+    min_amount: number;
+    company: string;
+    description: string;
+    id: number;
+    image_path: string;
+    create_at: string;
+    update_at: string;
+  }
