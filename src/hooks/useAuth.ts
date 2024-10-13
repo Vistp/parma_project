@@ -3,15 +3,15 @@ import authStore from "store/authStore";
 
 const useAuth = () => {
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
+    const email = localStorage.getItem("authEmail");
+    if (email) {
       authStore.isAuthenticated = true;
-      authStore.loginWithToken(token);
+      authStore.email = email;
     }
-  }, []);
-
+  }, [])
   return {
     isAuthenticated: authStore.isAuthenticated,
+    email: authStore.email,
     login: authStore.login.bind(authStore),
     logout: authStore.logout.bind(authStore),
     register: authStore.register.bind(authStore),
