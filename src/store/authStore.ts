@@ -36,6 +36,7 @@ class AuthStore {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
+          withCredentials: true,
         },
       );
       this.setEmail(username);
