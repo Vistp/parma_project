@@ -6,7 +6,7 @@
 }
 
 .dark-theme .ant-table-thead > tr > th {
-  background-color: #333;
+  background-color: #333 !important;
   border-bottom: 1px solid #444;
   font-weight: 700;
   color: #ccc;
