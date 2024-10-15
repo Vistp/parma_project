@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { endpoints } from 'consts/consts';
 import tableStore from 'store/tableStore';
-import { IFormDrill } from 'types/types';
+import { CustomFile, IFormDrill } from 'types/types';
 
 
 export const getData = async (endpoint: string = '') => {
@@ -13,8 +13,19 @@ export const getData = async (endpoint: string = '') => {
   }
 };
 
+export const getItemDrills = async () => {
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoints.drill}/${tableStore.idDrillEdit}`);
+    console.log(res)
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const addDrill = async (values: IFormDrill) => {
-  const body = {
+  const formData = new FormData();
+    const body = {
     name: values.name,
     diameter: Number(values.diameter),
     length_xD: Number(values.length_xD),
@@ -25,24 +36,35 @@ export const addDrill = async (values: IFormDrill) => {
     storage: values.storage,
     description: values.description,
   };
-  console.log(values)
-  try {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}${endpoints.createDrill}`, {
-      drill: JSON.stringify(body),
-      screws_ids: String([values.screws]),
-      plates_ids: String([values.plates]),
-    }, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+
+  formData.append('drill', JSON.stringify(body));
+  formData.append('screws_ids', String([values.screws]),);
+  formData.append('plates_ids', String([values.plates]));
+
+  if (values.images && values.images.length > 0) {
+    values.images.forEach((image) => {
+      const customFile = image as CustomFile;
+      const originFile = customFile.originFileObj || customFile;
+      formData.append('images', originFile);
     });
+  }
+
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}${endpoints.createDrill}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
 
     console.log('Форма успешно отправлена!');
     console.log(response);
     return { message: 'Форма успешно отправлена!' };
   } catch (error) {
     console.error('Возникла ошибка при отправке формы:', error);
-    console.log(error);
     throw error;
   }
 };

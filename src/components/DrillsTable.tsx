@@ -82,10 +82,14 @@ const DrillsTable: React.FC = observer(() => {
       title: 'Изображение',
       dataIndex: 'image_path',
       render: (imagePath: string) => {
-        const imageUrl = `${import.meta.env.VITE_BASE_URL}${imagePath}`;
+        if (!imagePath) {
+          return <NoPhotographyOutlinedIcon fontSize='large' />;
+        }
+        const firstImagePath = imagePath.split(',')[0].trim();
+        const imageUrl = `${import.meta.env.VITE_BASE_URL}${firstImagePath}`;
         return (
           <>
-            {imagePath ? (
+            {firstImagePath ? (
               <img
                 src={imageUrl}
                 alt="Изображение не найдено"

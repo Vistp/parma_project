@@ -10,6 +10,11 @@
     is_broken?: boolean;
     storage?: string;
     description?: string;
+    images?: File[];
+  }
+
+  export interface CustomFile extends File {
+    originFileObj?: File;
   }
   
   export interface IScrew {

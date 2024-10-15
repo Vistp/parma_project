@@ -1,28 +1,16 @@
-import { Form, Input, Button, Modal, Select } from 'antd';
+import { Form, Input, Button, Modal, Select, Upload } from 'antd';
 import { useThemeContext } from 'app/ThemeContextProvaider';
 import { useEffect, useState } from 'react';
 import tableStore from 'store/tableStore';
-import { IPlate, IScrew } from 'types/types';
+import { IFormDrill, IPlate, IScrew } from 'types/types';
 import { addDrill } from 'utils/api';
 import { getPlates } from 'utils/apiPlates';
 import { getScrews } from 'utils/apiScrews';
+import { UploadOutlined } from '@ant-design/icons';
+import { UploadFile } from 'antd/es/upload';
 
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 16 } };
 const tailLayout = { wrapperCol: { offset: 6, span: 16 } };
-
-interface IFormDrill {
-  name: string;
-  diameter: number;
-  length_xD: number;
-  deep_of_drill: number;
-  plate: number;
-  key: string;
-  company: string;
-  is_broken: boolean;
-  screws: number;
-  storage: string;
-  description: string;
-}
 
 interface ErrorInterface {
   message: string;
@@ -41,17 +29,21 @@ function AddForm({
 }) {
   const [screws, setScrews] = useState<IScrew[]>([]);
   const [plates, setPlates] = useState<IPlate[]>([]);
+  const [images, setImages] = useState<UploadFile[]>([]);
 
+  const handleChange = ({ fileList }: { fileList: UploadFile[] }) => {
+    setImages(fileList);
+  };
 
   useEffect(() => {
     const getAllScrews = async () => {
       const res = await getScrews();
-      setScrews(res)
-    }
+      setScrews(res);
+    };
     const getAllPlates = async () => {
       const res = await getPlates();
-      setPlates(res)
-    }
+      setPlates(res);
+    };
 
     getAllPlates();
     getAllScrews();
@@ -80,6 +72,7 @@ function AddForm({
         description: 'hello',
       }}
       onFinish={async (values) => {
+        values.images = images;
         try {
           console.log(values);
           const result = await onSubmit(values);
@@ -127,25 +120,21 @@ function AddForm({
           <Select.Option value={true}>Сломанно</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item
-        label="Винты"
-        name="screws"
-        rules={[{ required: true, message: 'Пожалуйста, выберите винт!' }]}
-      >
+      <Form.Item label="Винты" name="screws" rules={[{ required: true, message: 'Пожалуйста, выберите винт!' }]}>
         <Select mode="multiple" style={{ width: '100%' }} placeholder="Выберите винт...">
-          {screws.map(screw => (
-            <Select.Option key={screw.id} value={screw.id}>{screw.type}</Select.Option>
+          {screws.map((screw) => (
+            <Select.Option key={screw.id} value={screw.id}>
+              {screw.type}
+            </Select.Option>
           ))}
         </Select>
       </Form.Item>
-      <Form.Item
-        label="Пластины"
-        name="plates"
-        rules={[{ required: true, message: 'Пожалуйста, выберите винт(ы)!' }]}
-      >
+      <Form.Item label="Пластины" name="plates" rules={[{ required: true, message: 'Пожалуйста, выберите винт(ы)!' }]}>
         <Select mode="multiple" style={{ width: '100%' }} placeholder="Выберите пластину...">
-          {plates.map(plate => (
-            <Select.Option key={plate.id} value={plate.id}>{plate.type}</Select.Option>
+          {plates.map((plate) => (
+            <Select.Option key={plate.id} value={plate.id}>
+              {plate.type}
+            </Select.Option>
           ))}
         </Select>
       </Form.Item>
@@ -156,6 +145,13 @@ function AddForm({
       >
         <Input placeholder="Пожалуйста, выберите место хранения" />
       </Form.Item>
+
+      <Form.Item label="Изображение" name="images">
+        <Upload fileList={images} onChange={handleChange}>
+          <Button icon={<UploadOutlined />}>Click to Upload</Button>
+        </Upload>
+      </Form.Item>
+
       <Form.Item
         label="Описание"
         name="description"
@@ -197,7 +193,13 @@ const AddModal = () => {
       <Button type="primary" onClick={showModal}>
         Добавить сверло
       </Button>
-      <Modal className={mode === 'light' ? 'light-theme' : 'dark-theme'} title="Добавление сверла" open={modalOpen} footer={null} onCancel={handleCancel}>
+      <Modal
+        className={mode === 'light' ? 'light-theme' : 'dark-theme'}
+        title="Добавление сверла"
+        open={modalOpen}
+        footer={null}
+        onCancel={handleCancel}
+      >
         <AddForm onSubmit={addDrill} onSuccess={handleSuccess} />
       </Modal>
     </>
