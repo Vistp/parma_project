@@ -1,54 +1,54 @@
-import { Box, Card, Typography } from "@mui/material";
-import axios from "axios";
-import { observer } from "mobx-react-lite"
-import { useEffect, useState } from "react";
-import tableStore from "store/tableStore"
-
-// TODO: вынести запрос, интерфейс
-
-interface DrillItem {
-  id: number;
-  name: string;
-  diameter: number;
-  length_xD: number;
-  deep_of_drill: number;
-  company: string;
-  description: string;
-  image_path: string;
-}
+import { Box, Card, Typography, IconButton } from '@mui/material';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import tableStore from 'store/tableStore';
+import { DrillItem } from 'types/types';
+import { getDrill } from 'utils/api';
 
 export const WindowItemDrill: React.FC = observer(() => {
   const [item, setItem] = useState<DrillItem | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const getItemDrill = async () => {
-    try {
-      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}drill/${tableStore.idDrillDescription}`);
-      setItem(res.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [imageIndex, setImageIndex] = useState(0);
 
   useEffect(() => {
-    getItemDrill();
+    const fetchItemDrill = async () => {
+      setLoading(true);
+      const drillData = await getDrill();
+      if (drillData) {
+        setItem(drillData);
+      }
+      setLoading(false);
+    };
+
+    if (tableStore.idDrillDescription !== null) {
+      fetchItemDrill();
+    }
   }, [tableStore.idDrillDescription]);
 
-  if (item === null) {
-    return <div>Выберите строку</div>;
-  }
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  if (item === null) {
+    return <div>Выберите строку</div>;
+  }
+
+  const images = item.image_path.split(',').map((img) => img.trim());
+
+  const handlePrevImage = () => {
+    setImageIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
+  };
+
+  const handleNextImage = () => {
+    setImageIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
+  };
+
   return (
     <div>
-      {/* <h1>{tableStore.idDrillDescription}</h1> */}
       <Card sx={{ minWidth: 275, padding: 2, mt: 4 }}>
-        <Box display="flex">
-          <Box sx={{ flex: 1, mr: 2 }}>
+        <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }}>
+          <Box sx={{ flex: 1, mr: { sm: 2, xs: 0 }, mb: { xs: 2, sm: 0 } }}>
             <Typography gutterBottom sx={{ fontSize: 14 }}>
               ID: {item.id}
             </Typography>
@@ -71,21 +71,47 @@ export const WindowItemDrill: React.FC = observer(() => {
               Описание: {item.description}
             </Typography>
           </Box>
-          <Box sx={{ flex: 1 }}>
-            <Typography gutterBottom sx={{ fontSize: 14 }}>
-              Изображение:
-            </Typography>
-            <img
-              src={`${import.meta.env.VITE_BASE_URL}${item.image_path}`}
-              style={{
-                height: '150px',
-                width: 'auto',
-                border: '2px solid rgb(224, 224, 224)',
-                borderRadius: '4px',
-              }} />
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              position: 'relative',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                maxWidth: '100%',
+                mb: 1,
+              }}
+            >
+              <img
+                src={`${import.meta.env.VITE_BASE_URL}${images[imageIndex]}`}
+                alt={`drill-${imageIndex}`}
+                style={{
+                  height: 'auto',
+                  width: '100%',
+                  maxWidth: '200px',
+                  border: '2px solid rgb(224, 224, 224)',
+                  borderRadius: '4px',
+                }}
+              />
+            </Box>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <IconButton onClick={handlePrevImage}>
+                <ChevronLeft />
+              </IconButton>
+              <IconButton onClick={handleNextImage}>
+                <ChevronRight />
+              </IconButton>
+            </Box>
           </Box>
         </Box>
       </Card>
     </div>
-  )
-})
+  );
+});

@@ -88,3 +88,14 @@ export interface IPlate {
     create_at: string;
     update_at: string;
   }
+
+  export interface DrillItem {
+    id: number;
+    name: string;
+    diameter: number;
+    length_xD: number;
+    deep_of_drill: number;
+    company: string;
+    description: string;
+    image_path: string;
+  }

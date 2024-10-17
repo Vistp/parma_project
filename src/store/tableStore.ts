@@ -1,5 +1,5 @@
 import { endpoints } from 'consts/consts';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { IDrill } from 'types/types';
 import { getData } from 'utils/api';
 
@@ -7,14 +7,24 @@ class TableStore {
   drills: IDrill[] = [];
   isBroken: boolean = false;
   idDrillEdit: number = 1;
-  idDrillDescription: number = 1;
+  idDrillDescription: number | null = null;
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   async getDrills(): Promise<void> {
-    this.drills = await getData(endpoints.drills);
+    try {
+      const data = await getData(endpoints.drills);
+      runInAction(() => {
+        this.drills = data;
+        if (this.drills.length > 0) {
+          this.idDrillDescription = this.drills[0].id;
+        }
+      });
+    } catch (error) {
+      console.error("Failed to fetch drills:", error);
+    }
   }
 
   getDiameters(): number[] {

@@ -183,7 +183,7 @@ const DrillsTable: React.FC = observer(() => {
         columns={columns}
         dataSource={filteredData}
         onChange={onChange}
-        scroll={{ y: 55 * 5 }}
+        scroll={{ x: 1000, y: 55 * 5 }}
         pagination={false}
         onRow={(record) => ({
           onClick: () => tableStore.getDrillIdDescription(record.id),

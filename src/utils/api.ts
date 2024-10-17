@@ -3,7 +3,6 @@ import { endpoints } from 'consts/consts';
 import tableStore from 'store/tableStore';
 import { CustomFile, IFormDrill } from 'types/types';
 
-
 export const getData = async (endpoint: string = '') => {
   try {
     const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoint}?broken=${tableStore.isBroken}`);
@@ -13,19 +12,9 @@ export const getData = async (endpoint: string = '') => {
   }
 };
 
-export const getItemDrills = async () => {
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoints.drill}/${tableStore.idDrillEdit}`);
-    console.log(res)
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 export const addDrill = async (values: IFormDrill) => {
   const formData = new FormData();
-    const body = {
+  const body = {
     name: values.name,
     diameter: Number(values.diameter),
     length_xD: Number(values.length_xD),
@@ -38,7 +27,7 @@ export const addDrill = async (values: IFormDrill) => {
   };
 
   formData.append('drill', JSON.stringify(body));
-  formData.append('screws_ids', String([values.screws]),);
+  formData.append('screws_ids', String([values.screws]));
   formData.append('plates_ids', String([values.plates]));
 
   if (values.images && values.images.length > 0) {
@@ -50,15 +39,11 @@ export const addDrill = async (values: IFormDrill) => {
   }
 
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}${endpoints.createDrill}`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}${endpoints.createDrill}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
     console.log('Форма успешно отправлена!');
     console.log(response);
@@ -69,17 +54,68 @@ export const addDrill = async (values: IFormDrill) => {
   }
 };
 
+export const updateDrill = async (id: number, values: IFormDrill) => {
+  const formData = new FormData();
+  const body = {
+    name: values.name,
+    diameter: Number(values.diameter),
+    length_xD: Number(values.length_xD),
+    deep_of_drill: Number(values.deep_of_drill),
+    key: values.key,
+    company: values.company,
+    is_broken: values.is_broken,
+    storage: values.storage,
+    description: values.description,
+  };
+
+  formData.append('drill', JSON.stringify(body));
+  formData.append('screws_ids', String([values.screws]));
+  formData.append('plates_ids', String([values.plates]));
+
+  if (values.images && values.images.length > 0) {
+    values.images.forEach((image) => {
+      const customFile = image as CustomFile;
+      const originFile = customFile.originFileObj || customFile;
+      formData.append('images', originFile);
+    });
+  }
+
+  try {
+    const response = await axios.put(`${import.meta.env.VITE_BASE_URL}${endpoints.updateDrill}/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    console.log('Данные успешно обновлены!');
+    console.log(response);
+    return { message: 'Данные успешно обновлены!' };
+  } catch (error) {
+    console.error('Возникла ошибка при обновлении данных:', error);
+    throw error;
+  }
+};
+
 export const deleteDrill = async (id: number) => {
   try {
     const config = {
       headers: {
         'Content-Type': 'application/json',
       },
-    }
-    const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}${endpoints.deleteDrill}${id}`,config);
+    };
+    const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}${endpoints.deleteDrill}${id}`, config);
     tableStore.getDrills();
     return res.data;
   } catch (error) {
     console.log(error);
   }
-}
+};
+
+export const getDrill = async () => {
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoints.drill}/${tableStore.idDrillDescription}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
