@@ -1,3 +1,5 @@
+import { UploadFile } from "antd";
+
   export interface IFormDrill{
     name?: string;
     diameter?: number;
@@ -10,7 +12,7 @@
     is_broken?: boolean;
     storage?: string;
     description?: string;
-    images?: File[];
+    images?: File[] | UploadFile[];
   }
 
   export interface CustomFile extends File {

@@ -14,7 +14,7 @@ export const WindowItemDrill: React.FC = observer(() => {
   useEffect(() => {
     const fetchItemDrill = async () => {
       setLoading(true);
-      const drillData = await getDrill(tableStore.idDrillDescription);
+      const drillData = await getDrill(tableStore.idDrillDescription!);
       if (drillData) {
         setItem(drillData);
       }
@@ -34,7 +34,6 @@ export const WindowItemDrill: React.FC = observer(() => {
     return <div>Выберите строку</div>;
   }
 
-  //const images = item.image_path.split(',').map((img) => img.trim());
   const images = item.image_path ? item.image_path.split(',').map((img) => img.trim()) : [];
 
   const handlePrevImage = () => {
