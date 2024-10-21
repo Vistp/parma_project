@@ -11,14 +11,25 @@ import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteDrill } from 'utils/api';
+import { EditDrillForm } from './EditDrillForm';
 
 const DrillsTable: React.FC = observer(() => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [selectedDiameters, setSelectedDiameters] = useState<number[]>([]);
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     tableStore.getDrills();
   }, []);
+
+  const handleEditClick = (id: number) => {
+    tableStore.getDrillIdEdit(id);
+    setVisible(true)
+  }
+
+  const handleCloseModal = () => {
+    setVisible(false); 
+  };
 
   const columns: TableColumnsType<IDrill> = [
     {
@@ -111,8 +122,8 @@ const DrillsTable: React.FC = observer(() => {
       title: 'Действия',
       render: (_text, record) => (
         <>
-          <IconButton edge="start" color="inherit" onClick={() => tableStore.getDrillIdEdit(record.id)}>
-            <EditIcon /> 
+          <IconButton edge="start" color="inherit" onClick={() => handleEditClick(record.id)}>
+            <EditIcon />
           </IconButton>
           <IconButton edge="end" color="inherit" onClick={() => deleteDrill(record.id)}>
             <DeleteIcon />
@@ -215,6 +226,11 @@ const DrillsTable: React.FC = observer(() => {
           </div>
         </div>
       </Drawer>
+      <EditDrillForm 
+        id={tableStore.idDrillEdit} 
+        visible={visible} 
+        onClose={handleCloseModal} 
+      />
     </>
   );
 });

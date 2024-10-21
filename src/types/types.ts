@@ -15,6 +15,7 @@
 
   export interface CustomFile extends File {
     originFileObj?: File;
+    url?: string;
   }
   
   export interface IScrew {

@@ -6,7 +6,7 @@ import { getData } from 'utils/api';
 class TableStore {
   drills: IDrill[] = [];
   isBroken: boolean = false;
-  idDrillEdit: number = 1;
+  idDrillEdit: number | null = null;
   idDrillDescription: number | null = null;
 
   constructor() {

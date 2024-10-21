@@ -14,7 +14,7 @@ export const WindowItemDrill: React.FC = observer(() => {
   useEffect(() => {
     const fetchItemDrill = async () => {
       setLoading(true);
-      const drillData = await getDrill();
+      const drillData = await getDrill(tableStore.idDrillDescription);
       if (drillData) {
         setItem(drillData);
       }
@@ -34,7 +34,8 @@ export const WindowItemDrill: React.FC = observer(() => {
     return <div>Выберите строку</div>;
   }
 
-  const images = item.image_path.split(',').map((img) => img.trim());
+  //const images = item.image_path.split(',').map((img) => img.trim());
+  const images = item.image_path ? item.image_path.split(',').map((img) => img.trim()) : [];
 
   const handlePrevImage = () => {
     setImageIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
@@ -91,7 +92,7 @@ export const WindowItemDrill: React.FC = observer(() => {
             >
               <img
                 src={`${import.meta.env.VITE_BASE_URL}${images[imageIndex]}`}
-                alt={`drill-${imageIndex}`}
+                alt='Изображение не найдено'
                 style={{
                   height: 'auto',
                   width: '100%',

@@ -83,9 +83,8 @@ function AddForm({
         }
       }}
     >
-      {/* Поля формы */}
-      <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Пожалуйста, введите ваше название!' }]}>
-        <Input placeholder="Пожалуйста, введите ваше название" />
+      <Form.Item label="Название" name="name" rules={[{ required: true, message: 'Пожалуйста, введите название!' }]}>
+        <Input placeholder="Пожалуйста, введите название" />
       </Form.Item>
       <Form.Item label="Диаметр" name="diameter" rules={[{ required: true, message: 'Пожалуйста, введите диаметр!' }]}>
         <Input type="number" placeholder="Пожалуйста, введите диаметр" />
@@ -148,7 +147,7 @@ function AddForm({
 
       <Form.Item label="Изображение" name="images">
         <Upload fileList={images} onChange={handleChange}>
-          <Button icon={<UploadOutlined />}>Click to Upload</Button>
+          <Button icon={<UploadOutlined />}>Нажмите, чтобы загрузить</Button>
         </Upload>
       </Form.Item>
 

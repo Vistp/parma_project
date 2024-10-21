@@ -54,7 +54,8 @@ export const addDrill = async (values: IFormDrill) => {
   }
 };
 
-export const updateDrill = async (id: number, values: IFormDrill) => {
+export const updateDrill = async (id: number | null, values: IFormDrill) => {
+  console.log(values.images)
   const formData = new FormData();
   const body = {
     name: values.name,
@@ -72,16 +73,36 @@ export const updateDrill = async (id: number, values: IFormDrill) => {
   formData.append('screws_ids', String([values.screws]));
   formData.append('plates_ids', String([values.plates]));
 
+  const urlToFile = async (url: string, filename: string, mimeType: string): Promise<File> => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new File([blob], filename, { type: mimeType });
+  };
+
   if (values.images && values.images.length > 0) {
-    values.images.forEach((image) => {
+    const existingImageFilesPromises = values.images
+      .filter((image) => !(image as CustomFile).originFileObj) 
+      .map((image) => {
+        const customFile = image as CustomFile;
+        const mimeType = 'image/png'; 
+        return urlToFile(customFile.url!, customFile.name!, mimeType);
+      });
+
+    const newImages = values.images.filter((image) => (image as CustomFile).originFileObj);
+
+    const existingImageFiles = await Promise.all(existingImageFilesPromises);
+
+    existingImageFiles.forEach((file) => {
+      formData.append('images', file);
+    });
+
+    newImages.forEach((image) => {
       const customFile = image as CustomFile;
-      const originFile = customFile.originFileObj || customFile;
-      formData.append('images', originFile);
+      formData.append('images', customFile.originFileObj!);
     });
   }
-
   try {
-    const response = await axios.put(`${import.meta.env.VITE_BASE_URL}${endpoints.updateDrill}/${id}`, formData, {
+    const response = await axios.put(`${import.meta.env.VITE_BASE_URL}${endpoints.updateDrill}${id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -111,9 +132,9 @@ export const deleteDrill = async (id: number) => {
   }
 };
 
-export const getDrill = async () => {
+export const getDrill = async (id: number) => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoints.drill}/${tableStore.idDrillDescription}`);
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoints.drill}/${id}`);
     return res.data;
   } catch (error) {
     console.log(error);
