@@ -1,25 +1,25 @@
 import { endpoints } from 'consts/consts';
 import { makeAutoObservable, runInAction } from 'mobx';
-import { IDrill } from 'types/types';
+import { DetailType, IDetail } from 'types/types';
 import { getData } from 'utils/api';
 
 class TableStore {
-  drills: IDrill[] = [];
+  details: IDetail[] = [];
   isBroken: boolean = false;
-  idDrillEdit: number | null = null;
-  idDrillDescription: number | null = null;
+  idDetailEdit: number | null = null;
+  idDetailDescription: number | null = null;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  async getDrills(): Promise<void> {
+  async getDetails(details: DetailType): Promise<void> {
     try {
-      const data = await getData(endpoints.drills);
+      const data = await getData(endpoints[details]);
       runInAction(() => {
-        this.drills = data;
-        if (this.drills.length > 0) {
-          this.idDrillDescription = this.drills[0].id;
+        this.details = data;
+        if (this.details.length > 0) {
+          this.idDetailDescription = this.details[0].id;
         }
       });
     } catch (error) {
@@ -27,23 +27,45 @@ class TableStore {
     }
   }
 
+  getDetailsParameters(details: DetailType) {
+    switch (details) {
+      case 'drills': {
+        return this.getDiameters();}
+      case 'screws':
+        return this.getScrewsLength();
+      case 'plates':
+        return this.getPlatesAmount();
+    }
+  }
+
   getDiameters(): number[] {
-    if (!this.drills || !this.drills.length) return [];
-    return Array.from(new Set(this.drills.map((drill) => drill.diameter))).sort((a, b) => a - b);
+    if (!this.details || !this.details.length) return [];
+    const diameters = this.details.map((drill) => drill.diameter);
+    return Array.from(new Set(diameters)).sort((a, b) => a - b);
+  }
+
+  getScrewsLength(): number[] {
+    if (!this.details || !this.details.length) return [];
+    return Array.from(new Set(this.details.map((screw) => screw.length))).sort((a, b) => a! - b!);
+  }
+
+  getPlatesAmount(): number[] {
+    if (!this.details || !this.details.length) return [];
+    return Array.from(new Set(this.details.map((plate) => plate.amount))).sort((a, b) => a! - b!);
   }
 
   handleIsBroken(): void {
     this.isBroken = !this.isBroken;
-    this.getDrills();
+    this.getDetails('drills');
   }
 
-  getDrillIdEdit(id: number): void {
-    this.idDrillEdit = id;
-    console.log(this.idDrillEdit);
+  getDetailIdEdit(id: number): void {
+    this.idDetailEdit = id;
+    // console.log(this.idDetailEdit);
   }
 
-  getDrillIdDescription(id: number): void {
-    this.idDrillDescription = id;
+  getDetailIdDescription(id: number): void {
+    this.idDetailDescription = id;
   }
 }
 

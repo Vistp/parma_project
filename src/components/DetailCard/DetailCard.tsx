@@ -1,30 +1,37 @@
-import { Box, Card, Typography, IconButton } from '@mui/material';
+import { Box, Card, IconButton } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import tableStore from 'store/tableStore';
-import { DrillItem } from 'types/types';
-import { getDrill } from 'utils/api';
+import { DetailType, IDetail } from 'types/types';
+import { getDetail } from 'utils/api';
+import { DrillCardTmp, PlatesCardTmp, ScrewCardTmp } from './CardTmp';
+import { useLocation } from 'react-router-dom';
 
-export const WindowItemDrill: React.FC = observer(() => {
-  const [item, setItem] = useState<DrillItem | null>(null);
+export const DetailCard = observer(() => {
+  const [item, setItem] = useState<IDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [imageIndex, setImageIndex] = useState(0);
 
+  const activeItems: string = useLocation().pathname.slice(1);
+
   useEffect(() => {
-    const fetchItemDrill = async () => {
+    const fetchDetail = async () => {
       setLoading(true);
-      const drillData = await getDrill(tableStore.idDrillDescription!);
-      if (drillData) {
-        setItem(drillData);
+
+      // console.log(tableStore.idDetailDescription!, activeItems.slice(0, -1))
+      const detail = await getDetail(tableStore.idDetailDescription!, activeItems.slice(0, -1) as DetailType);
+      if (detail) {
+        setItem(detail);
       }
+
       setLoading(false);
     };
 
-    if (tableStore.idDrillDescription !== null) {
-      fetchItemDrill();
+    if (tableStore.idDetailDescription !== null) {
+      fetchDetail();
     }
-  }, [tableStore.idDrillDescription]);
+  }, [tableStore.idDetailDescription]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -48,29 +55,15 @@ export const WindowItemDrill: React.FC = observer(() => {
     <div>
       <Card sx={{ minWidth: 275, padding: 2, mt: 4 }}>
         <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }}>
-          <Box sx={{ flex: 1, mr: { sm: 2, xs: 0 }, mb: { xs: 2, sm: 0 } }}>
-            <Typography gutterBottom sx={{ fontSize: 14 }}>
-              ID: {item.id}
-            </Typography>
-            <Typography gutterBottom sx={{ fontSize: 14 }}>
-              Название: {item.name}
-            </Typography>
-            <Typography gutterBottom sx={{ fontSize: 14 }}>
-              Диаметр: {item.diameter}
-            </Typography>
-            <Typography gutterBottom sx={{ fontSize: 14 }}>
-              Длина: {item.length_xD}
-            </Typography>
-            <Typography gutterBottom sx={{ fontSize: 14 }}>
-              Глубина сверления: {item.deep_of_drill}
-            </Typography>
-            <Typography gutterBottom sx={{ fontSize: 14 }}>
-              Компания: {item.company}
-            </Typography>
-            <Typography gutterBottom sx={{ fontSize: 14 }}>
-              Описание: {item.description}
-            </Typography>
-          </Box>
+          {activeItems === 'drills' ? (
+            <DrillCardTmp item={item} />
+          ) : activeItems === 'screws' ? (
+            <ScrewCardTmp item={item} />
+          ) : activeItems === 'plates' ? (
+            <PlatesCardTmp item={item} />
+          ) : (
+            <div>Неверный тип данных</div>
+          )}
           <Box
             sx={{
               flex: 1,
@@ -91,7 +84,7 @@ export const WindowItemDrill: React.FC = observer(() => {
             >
               <img
                 src={`${import.meta.env.VITE_BASE_URL}${images[imageIndex]}`}
-                alt='Изображение не найдено'
+                alt="Изображение не найдено"
                 style={{
                   height: 'auto',
                   width: '100%',
@@ -101,11 +94,12 @@ export const WindowItemDrill: React.FC = observer(() => {
                 }}
               />
             </Box>
+            <Box sx={{ fontSize: '14px', color: 'gray' }}>{`${imageIndex + 1}/${images.length}`}</Box>
             <Box display="flex" justifyContent="center" alignItems="center">
-              <IconButton onClick={handlePrevImage}>
+              <IconButton onClick={handlePrevImage} disabled={imageIndex === 0}>
                 <ChevronLeft />
               </IconButton>
-              <IconButton onClick={handleNextImage}>
+              <IconButton onClick={handleNextImage} disabled={imageIndex === images.length - 1}>
                 <ChevronRight />
               </IconButton>
             </Box>

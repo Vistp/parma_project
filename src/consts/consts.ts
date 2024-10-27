@@ -5,7 +5,9 @@ export const endpoints = {
   updateDrill: 'drill/update/',
   deleteDrill: 'drill/delete/',
   screws: 'screws',
+  screw: 'screw',
   plates: 'plates',
+  plate: 'plate',
   register: 'auth/register',
   login: 'auth/jwt/login',
 }

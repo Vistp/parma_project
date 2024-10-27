@@ -1,11 +1,22 @@
 import axios from 'axios';
 import { endpoints } from 'consts/consts';
 import tableStore from 'store/tableStore';
-import { CustomFile, IFormDrill } from 'types/types';
+import { CustomFile, DetailType, IFormDrill } from 'types/types';
 
-export const getData = async (endpoint: string = '') => {
+
+const getData = async (endpoint: string = '') => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoint}?broken=${tableStore.isBroken}`);
+    const isBroken = endpoint === 'drills' ? `?broken=${tableStore.isBroken}` : '';
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoint}${isBroken}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getDetail = async (id: number, detail: DetailType) => {
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoints[detail]}/${id}`);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -117,26 +128,24 @@ export const updateDrill = async (id: number | null, values: IFormDrill) => {
   }
 };
 
-export const deleteDrill = async (id: number) => {
+const deleteDetail = async (id: number, detail: DetailType) => {
   try {
     const config = {
       headers: {
         'Content-Type': 'application/json',
       },
     };
-    const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}${endpoints.deleteDrill}${id}`, config);
-    tableStore.getDrills();
+    const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}${endpoints[detail]}${id}`, config);
+    tableStore.getDetails(detail);
     return res.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getDrill = async (id: number) => {
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}${endpoints.drill}/${id}`);
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
+
+export {
+  getData,
+  getDetail,
+  deleteDetail,
+}

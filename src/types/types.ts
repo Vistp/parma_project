@@ -1,104 +1,89 @@
 import { UploadFile } from "antd";
 
-  export interface IFormDrill{
-    name?: string;
-    diameter?: number;
-    length_xD?: number;
-    deep_of_drill?: number;
-    plates?: number;
-    screws?: number;
-    key?: string;
-    company?: string;
-    is_broken?: boolean;
-    storage?: string;
-    description?: string;
-    images?: File[] | UploadFile[];
-  }
+interface CustomFile extends File {
+  originFileObj?: File;
+  url?: string;
+};
 
-  export interface CustomFile extends File {
-    originFileObj?: File;
-    url?: string;
-  }
-  
-  export interface IScrew {
-    type: string;
-    length: number;
-    thread: string;
-    stepOfThread: number;
-    company: string;
-    description: string;
-    id: number;
-    imagePath: string;
-    createAt: string;
-    updateAt: string;
+interface IFormDrill{
+  name?: string;
+  diameter?: number;
+  length_xD?: number;
+  deep_of_drill?: number;
+  plates?: number;
+  screws?: number;
+  key?: string;
+  company?: string;
+  is_broken?: boolean;
+  storage?: string;
+  description?: string;
+  images?: File[] | UploadFile[];
+};
+
+interface IScrew {
+  id: number;
+  type: string;
+  length: number;
+  thread: string;
+  step_of_thread: number;
+  company: string;
+  description: string;
+  image_path: string;
+  create_at?: string;
+  update_at?: string
+};
+
+interface IPlate {
+  type: string;
+  sub_type: string;
+  material: string;
+  amount: number;
+  min_amount: number;
+  company: string;
+  description: string;
+  id: number;
+  image_path: string;
+  create_at?: string;
+  update_at?: string;
+};
+
+interface IDrill {
+  id: number;
+  name: string;
+  diameter: number;
+  deep_of_drill: number;
+  screws?: Array<IScrew>;
+  company: string;
+  image_path: string;
+  plates?: Array<IPlate>;
+  length_xD: number;
+  key?: string;
+  is_broken?: boolean;
+  storage: string;
+  create_at?: string;
+  update_at?: string;
+};
+
+interface IDetail extends IDrill, IScrew, IPlate {};
+
+type DetailType = 'drills' | 'screws' | 'plates'; //обязательно во множ числе
+
+interface ErrorInterface {
+  message: string;
 }
 
-export interface IPlate {
-    type: string;
-    subType: string;
-    material: string;
-    amount: number;
-    minAmount: number;
-    company: string;
-    description: string;
-    id: number;
-    imagePath: string;
-    createAt: string;
-    updateAt: string;
+interface SuccessInterface {
+  message: string;
 }
 
-
-  export interface IDrill {
-    id: number;
-    name: string;
-    diameter: number;
-    deep_of_drill: number;
-    screws?: Array<IScrew>;
-    company: string;
-    image_path: string,
-    create_at?: string;
-    plates?: Array<IPlate>;
-    length_xD: number;
-    key?: string;
-    is_broken?: boolean,
-    storage: string,
-    update_at?: string;
-  }
-  
-  export interface IScrew {
-    id: number;
-    type: string;
-    length: number;
-    thread: string;
-    step_of_thread: number;
-    company: string;
-    description: string;
-    image_path: string;
-    create_at: string;
-    update_at: string
-  }
-
-  export interface IPlate {
-    type: string;
-    sub_type: string;
-    material: string;
-    amount: number;
-    min_amount: number;
-    company: string;
-    description: string;
-    id: number;
-    image_path: string;
-    create_at: string;
-    update_at: string;
-  }
-
-  export interface DrillItem {
-    id: number;
-    name: string;
-    diameter: number;
-    length_xD: number;
-    deep_of_drill: number;
-    company: string;
-    description: string;
-    image_path: string;
-  }
+export type {
+  CustomFile,
+  IFormDrill,
+  IDrill,
+  IScrew,
+  IPlate,
+  IDetail,
+  DetailType,
+  ErrorInterface,
+  SuccessInterface,
+}

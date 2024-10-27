@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-interface ToolsDropdownProps {
-  activeTool?: string;
-}
-
-export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({ activeTool }) => {
+export const ToolsDropdown = () => {
   const [selectedTool, setSelectedTool] = useState<string>('');
   const navigate = useNavigate();
+
+  const activeItem = useLocation().pathname.slice(1)
+  
   useEffect(() => {
-    if (activeTool) {
-      setSelectedTool(activeTool);
+    if (activeItem) {
+      setSelectedTool(activeItem);
     } else {
       setSelectedTool('');
     }
-  }, [activeTool]);
+  }, [activeItem]);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value as string;
@@ -33,7 +32,10 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({ activeTool }) => {
           <MenuItem value="screws" onClick={() => navigate('/screws')}>
             Винты
           </MenuItem>
-          <MenuItem value="archive" onClick={() => navigate('/archive')}>
+          <MenuItem value="plates" onClick={() => navigate('/plates')}>
+            Пластины
+          </MenuItem>
+          <MenuItem value="archive" onClick={() => navigate('/drills_archive')}>
             Архив
           </MenuItem>
         </Select>
@@ -41,3 +43,5 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({ activeTool }) => {
     </>
   );
 };
+
+

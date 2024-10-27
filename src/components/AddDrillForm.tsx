@@ -2,23 +2,14 @@ import { Form, Input, Button, Modal, Select, Upload } from 'antd';
 import { useThemeContext } from 'app/ThemeContextProvaider';
 import { useEffect, useState } from 'react';
 import tableStore from 'store/tableStore';
-import { IFormDrill, IPlate, IScrew } from 'types/types';
-import { addDrill } from 'utils/api';
-import { getPlates } from 'utils/apiPlates';
-import { getScrews } from 'utils/apiScrews';
+import { IFormDrill, IDetail, ErrorInterface, SuccessInterface } from 'types/types';
+import { addDrill, getData } from 'utils/api';
 import { UploadOutlined } from '@ant-design/icons';
 import { UploadFile } from 'antd/es/upload';
 
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 16 } };
 const tailLayout = { wrapperCol: { offset: 6, span: 16 } };
 
-interface ErrorInterface {
-  message: string;
-}
-
-interface SuccessInterface {
-  message: string;
-}
 
 function AddForm({
   onSubmit,
@@ -27,8 +18,8 @@ function AddForm({
   onSubmit: (values: IFormDrill) => Promise<ErrorInterface | SuccessInterface>;
   onSuccess: () => void;
 }) {
-  const [screws, setScrews] = useState<IScrew[]>([]);
-  const [plates, setPlates] = useState<IPlate[]>([]);
+  const [screws, setScrews] = useState<IDetail[]>([]);
+  const [plates, setPlates] = useState<IDetail[]>([]);
   const [images, setImages] = useState<UploadFile[]>([]);
 
   const handleChange = ({ fileList }: { fileList: UploadFile[] }) => {
@@ -37,11 +28,11 @@ function AddForm({
 
   useEffect(() => {
     const getAllScrews = async () => {
-      const res = await getScrews();
+      const res = await getData('screws');
       setScrews(res);
     };
     const getAllPlates = async () => {
-      const res = await getPlates();
+      const res = await getData('plates');
       setPlates(res);
     };
 
@@ -182,7 +173,7 @@ const AddModal = () => {
 
   const handleSuccess = () => {
     setModalOpen(false);
-    tableStore.getDrills();
+    tableStore.getDetails('drills');
   };
 
   const { mode } = useThemeContext(); // тема 'light' или 'dark'

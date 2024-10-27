@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, Upload, Button, UploadFile } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { getDrill, updateDrill } from 'utils/api';
-import { getScrews } from 'utils/apiScrews';
-import { getPlates } from 'utils/apiPlates';
-import { IFormDrill, IPlate, IScrew } from 'types/types';
+import { getData, getDetail, /* getDrill, */ updateDrill } from 'utils/api';
+import { IFormDrill, IDetail, DetailType } from 'types/types';
 import tableStore from 'store/tableStore';
 
-interface EditDrillFormProps {
-  id: number | null;
-  visible: boolean;
-  onClose: () => void;
-}
 
-export const EditDrillForm: React.FC<EditDrillFormProps> = ({ id, visible, onClose }) => {
+export const EditDrillForm = ({
+    id,
+    visible,
+    onClose,
+    activeItem
+  } : {
+    id: number | null,
+    visible: boolean,
+    onClose: () => void,
+    activeItem: DetailType
+  }) => {
   const [form] = Form.useForm();
   const [images, setImages] = useState<UploadFile[]>([]);
-  const [availableScrews, setAvailableScrews] = useState<IScrew[]>([]);
-  const [availablePlates, setAvailablePlates] = useState<IPlate[]>([]);
+  const [availableScrews, setAvailableScrews] = useState<IDetail[]>([]);
+  const [availablePlates, setAvailablePlates] = useState<IDetail[]>([]);
   const [loading, setLoading] = useState(false);
 
   const layout = { labelCol: { span: 6 }, wrapperCol: { span: 16 } };
@@ -26,12 +29,12 @@ export const EditDrillForm: React.FC<EditDrillFormProps> = ({ id, visible, onClo
   useEffect(() => {
     const fetchData = async () => {
       if (id && visible) {
-        const data = await getDrill(id);
+        const data = await getDetail(id, activeItem.slice(0, -1) as DetailType);
         if (data) {
           form.setFieldsValue({
             ...data,
-            screws: data.screws.map((screw: IScrew) => screw.id) || [],
-            plates: data.plates.map((plate: IPlate) => plate.id) || [],
+            screws: data.screws.map((screw: IDetail) => screw.id) || [],
+            plates: data.plates.map((plate: IDetail) => plate.id) || [],
           });
 
           const imageList = data.image_path
@@ -46,15 +49,15 @@ export const EditDrillForm: React.FC<EditDrillFormProps> = ({ id, visible, onClo
         }
       }
 
-      const screwsData = await getScrews();
+      const screwsData = await getData('screws');
       setAvailableScrews(screwsData); 
 
-      const platesData = await getPlates();
+      const platesData = await getData('plates');
       setAvailablePlates(platesData); 
     };
 
     fetchData();
-  }, [id, visible, form]);
+  }, [id, visible, form, activeItem]);
 
   const handleChange = ({ fileList }: { fileList: UploadFile[] }) => {
     setImages(fileList);
@@ -65,7 +68,7 @@ export const EditDrillForm: React.FC<EditDrillFormProps> = ({ id, visible, onClo
     try {
       values.images = images;
       await updateDrill(id, values);
-      tableStore.getDrills();
+      tableStore.getDetails('drills');
       onClose();
     } catch (error) {
       console.error('Ошибка при обновлении данных:', error);
