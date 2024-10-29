@@ -15,6 +15,9 @@ export default defineConfig({
     },
   },
   base: './',
+  optimizeDeps: {
+    exclude: ['chunk-P6V5SLAI']
+  },
   build: {
     outDir: './docs',
     emptyOutDir: true,
