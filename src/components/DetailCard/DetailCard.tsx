@@ -61,6 +61,8 @@ export const DetailCard = observer(() => {
             <ScrewCardTmp item={item} />
           ) : activeItems === 'plates' ? (
             <PlatesCardTmp item={item} />
+          ) : activeItems === 'archive_drills' ? (
+            <DrillCardTmp item={item} />
           ) : (
             <div>Неверный тип данных</div>
           )}

@@ -45,9 +45,11 @@ function actions(handleEditClick: (id: number) => void, detail: DetailType): Col
     title: 'Действия',
     render: (_text, record) => (
       <>
-        <IconButton edge="start" color="inherit" onClick={() => handleEditClick(record.id)}>
+        {detail !== 'archive_drills' && (
+          <IconButton edge="start" color="inherit" onClick={() => handleEditClick(record.id)}>
           <EditIcon />
         </IconButton>
+        )}
         <IconButton edge="end" color="inherit" onClick={() => deleteDetail(record.id, detail)}>
           <DeleteIcon />
         </IconButton>
@@ -78,7 +80,7 @@ const drillsColumns = (handleEditClick: (id: number) => void): TableColumnsType<
       render: (_text, record) => <span>{record.diameter} мм</span>,
     },
     {
-      title: 'Длинна',
+      title: 'Длина',
       dataIndex: 'length_xD',
       sorter: (a, b) => a.length_xD - b.length_xD,
       sortDirections: ['ascend', 'descend'],
@@ -201,4 +203,68 @@ const platesColumns = (handleEditClick: (id: number) => void): TableColumnsType<
   ];
 };
 
-export { drillsColumns, skrewsColumns, platesColumns };
+const archiveDrillsColumns = (handleEditClick: (id: number) => void): TableColumnsType<IDetail> => {
+  return [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      sorter: (a, b) => a.id - b.id,
+      sortDirections: ['ascend', 'descend'],
+    },
+    {
+      title: 'Название',
+      dataIndex: 'name',
+      sorter: (a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+      sortDirections: ['ascend', 'descend'],
+    },
+    {
+      title: 'Диаметр',
+      dataIndex: 'diameter',
+      sorter: (a, b) => a.diameter - b.diameter,
+      sortDirections: ['ascend', 'descend'],
+      render: (_text, record) => <span>{record.diameter} мм</span>,
+    },
+    {
+      title: 'Длина',
+      dataIndex: 'length_xD',
+      sorter: (a, b) => a.length_xD - b.length_xD,
+      sortDirections: ['ascend', 'descend'],
+    },
+    {
+      title: 'Глубина сверления',
+      dataIndex: 'deep_of_drill',
+      sorter: (a, b) => a.deep_of_drill - b.deep_of_drill,
+      sortDirections: ['ascend', 'descend'],
+    },
+    {
+      title: 'Компания',
+      dataIndex: 'company',
+      sorter: (a, b) => a.company.toLowerCase().localeCompare(b.company.toLowerCase()),
+      sortDirections: ['ascend', 'descend'],
+    },
+    {
+      title: 'Винты',
+      render: (_value, record) => (
+        <select defaultValue="Винты">
+          {record.screws?.map((screw) => (
+            <option key={screw.id}>{screw.type}</option>
+          ))}
+        </select>
+      ),
+    },
+    {
+      title: 'Пластины',
+      render: (_value, record) => (
+        <select defaultValue="Пластины">
+          {record.plates?.map((plate) => (
+            <option key={plate.id}>{plate.type}</option>
+          ))}
+        </select>
+      ),
+    },
+    finstImage,
+    actions(handleEditClick, 'archive_drills') as ColumnType<IDetail>,
+  ];
+};
+
+export { drillsColumns, skrewsColumns, platesColumns, archiveDrillsColumns };

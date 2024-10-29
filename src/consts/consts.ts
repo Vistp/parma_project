@@ -8,6 +8,8 @@ export const endpoints = {
   screw: 'screw',
   plates: 'plates',
   plate: 'plate',
+  archive_drills: 'archive_drills',
+  archive_drill: 'archive_drill',
   register: 'auth/register',
   login: 'auth/jwt/login',
 }

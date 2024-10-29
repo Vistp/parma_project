@@ -64,9 +64,26 @@ interface IDrill {
   update_at?: string;
 };
 
-interface IDetail extends IDrill, IScrew, IPlate {};
+interface IDrillArchive {
+  id: number;
+  name: string;
+  diameter: number;
+  deep_of_drill: number;
+  screws?: Array<IScrew>;
+  company: string;
+  image_path: string;
+  plates?: Array<IPlate>;
+  length_xD: number;
+  key?: string;
+  is_broken?: boolean;
+  storage: string;
+  create_at?: string;
+  update_at?: string;
+};
 
-type DetailType = 'drills' | 'screws' | 'plates'; //обязательно во множ числе
+interface IDetail extends IDrill, IScrew, IPlate, IDrillArchive {};
+
+type DetailType = 'drills' | 'screws' | 'plates' | 'archive_drills'; //обязательно во множ числе
 
 interface ErrorInterface {
   message: string;

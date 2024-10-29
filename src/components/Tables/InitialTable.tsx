@@ -7,7 +7,7 @@ import { useThemeContext } from 'app/ThemeContextProvaider';
 import { EditDrillForm } from '../EditDrillForm';
 import TablesButtons from 'components/TablesButtons/TablesButtons';
 import TablesFilter from 'components/TablesFilter/TablesFilter';
-import { drillsColumns, platesColumns, skrewsColumns } from './columns';
+import { drillsColumns, platesColumns, skrewsColumns, archiveDrillsColumns } from './columns';
 import { useLocation } from 'react-router-dom';
 import { ColumnsType } from 'antd/es/table';
 import 'app/index.css';
@@ -60,6 +60,9 @@ const InitialTable = observer(() => {
 		case 'plates':
 			columns = platesColumns(handleEditClick);
 			break;
+    case 'archive_drills':
+      columns = archiveDrillsColumns(handleEditClick);
+      break;
 	};
 
   const openFilterDrawer = () => {
