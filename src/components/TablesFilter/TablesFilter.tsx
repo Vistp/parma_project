@@ -5,6 +5,7 @@ import tableStore from 'store/tableStore';
 import 'app/index.css'
 import { DetailType } from 'types/types';
 import { useLocation } from 'react-router-dom';
+import { Switch as MUISwitch } from '@mui/material';
 
 
 const TablesFilter = ({
@@ -61,6 +62,12 @@ const TablesFilter = ({
 				className={mode === 'light' ? 'light-theme' : 'dark-theme'}
 			>
         <div>
+				{activeItems === 'drills' && (
+        <label>
+          Показать сломанные
+          <MUISwitch checked={tableStore.isBroken} onChange={() => tableStore.handleIsBroken()} />
+        </label>
+      )}
           <h3>Выберите диаметры:</h3>
           <Checkbox.Group
             options={options}

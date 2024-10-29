@@ -4,6 +4,8 @@ export const endpoints = {
   createDrill: 'drill/create',
   updateDrill: 'drill/update/',
   deleteDrill: 'drill/delete/',
+  archive_drills: 'archive_drills',
+  archive_drill: 'archive_drill',
   screws: 'screws',
   screw: 'screw',
   plates: 'plates',

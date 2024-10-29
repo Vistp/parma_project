@@ -5,6 +5,7 @@ import { getData } from 'utils/api';
 
 class TableStore {
   details: IDetail[] = [];
+  isError: boolean = false;
   isBroken: boolean = false;
   idDetailEdit: number | null = null;
   idDetailDescription: number | null = null;
@@ -14,6 +15,7 @@ class TableStore {
   }
 
   async getDetails(details: DetailType): Promise<void> {
+    this.isError = false;
     try {
       const data = await getData(endpoints[details]);
       runInAction(() => {
@@ -23,18 +25,23 @@ class TableStore {
         }
       });
     } catch (error) {
+      runInAction(() => {
+        this.isError = true;
+      });
       console.error("Failed to fetch drills:", error);
     }
   }
 
   getDetailsParameters(details: DetailType) {
     switch (details) {
-      case 'drills': {
-        return this.getDiameters();}
+      case 'drills':
+        return this.getDiameters();
       case 'screws':
         return this.getScrewsLength();
       case 'plates':
         return this.getPlatesAmount();
+      case 'archive_drills':
+        return this.getDiameters();
     }
   }
 
@@ -61,7 +68,6 @@ class TableStore {
 
   getDetailIdEdit(id: number): void {
     this.idDetailEdit = id;
-    // console.log(this.idDetailEdit);
   }
 
   getDetailIdDescription(id: number): void {

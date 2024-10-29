@@ -66,7 +66,7 @@ interface IDrill {
 
 interface IDetail extends IDrill, IScrew, IPlate {};
 
-type DetailType = 'drills' | 'screws' | 'plates'; //обязательно во множ числе
+type DetailType = 'drills' | 'screws' | 'plates' | 'archive_drills'; //обязательно во множ числе
 
 interface ErrorInterface {
   message: string;

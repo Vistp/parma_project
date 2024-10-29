@@ -19,7 +19,6 @@ export const DetailCard = observer(() => {
     const fetchDetail = async () => {
       setLoading(true);
 
-      // console.log(tableStore.idDetailDescription!, activeItems.slice(0, -1))
       const detail = await getDetail(tableStore.idDetailDescription!, activeItems.slice(0, -1) as DetailType);
       if (detail) {
         setItem(detail);
@@ -55,7 +54,7 @@ export const DetailCard = observer(() => {
     <div>
       <Card sx={{ minWidth: 275, padding: 2, mt: 4 }}>
         <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }}>
-          {activeItems === 'drills' ? (
+          {activeItems === 'drills' || activeItems === 'archive_drills' ? (
             <DrillCardTmp item={item} />
           ) : activeItems === 'screws' ? (
             <ScrewCardTmp item={item} />

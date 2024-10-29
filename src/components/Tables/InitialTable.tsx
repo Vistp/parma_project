@@ -8,7 +8,7 @@ import { EditDrillForm } from '../EditDrillForm';
 import TablesButtons from 'components/TablesButtons/TablesButtons';
 import TablesFilter from 'components/TablesFilter/TablesFilter';
 import { drillsColumns, platesColumns, skrewsColumns } from './columns';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ColumnsType } from 'antd/es/table';
 import 'app/index.css';
 
@@ -17,15 +17,19 @@ const InitialTable = observer(() => {
   const [selectedParameters, setSelectedParameters] = useState<number[]>([]);
   const [visible, setVisible] = useState(false);
   const activeItems: string = useLocation().pathname.slice(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDetails = async () => {
       await tableStore.getDetails(activeItems as DetailType);
+      if (tableStore.isError) {
+        navigate('/error'); 
+      }
     };
 
     fetchDetails();
     setSelectedParameters([]);
-  }, [activeItems]);
+  }, [activeItems, navigate]);
 
   const handleEditClick = (id: number) => {
     tableStore.getDetailIdEdit(id);
@@ -60,6 +64,9 @@ const InitialTable = observer(() => {
 		case 'plates':
 			columns = platesColumns(handleEditClick);
 			break;
+    case 'archive_drills':
+      columns = drillsColumns(handleEditClick);
+      break;
 	};
 
   const openFilterDrawer = () => {
@@ -84,7 +91,7 @@ const InitialTable = observer(() => {
   return (
     <>
       {/* Панель кнопок над таблицей*/}
-			<TablesButtons openFilter={openFilterDrawer} />
+			<TablesButtons openFilter={openFilterDrawer} activeItems={activeItems} />
 
       {/* Индикация активных фильтров */}
       {selectedParameters.length > 0 && (

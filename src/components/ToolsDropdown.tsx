@@ -35,7 +35,7 @@ export const ToolsDropdown = () => {
           <MenuItem value="plates" onClick={() => navigate('/plates')}>
             Пластины
           </MenuItem>
-          <MenuItem value="archive" onClick={() => navigate('/drills_archive')}>
+          <MenuItem value="archive_drills" onClick={() => navigate('/archive_drills')}>
             Архив
           </MenuItem>
         </Select>
