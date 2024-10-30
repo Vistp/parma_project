@@ -129,13 +129,14 @@ export const updateDrill = async (id: number | null, values: IFormDrill) => {
 };
 
 const deleteDetail = async (id: number, detail: DetailType) => {
+  const deleteDrill = (detail === 'drills') ? endpoints.deleteDrill : undefined;
   try {
     const config = {
       headers: {
         'Content-Type': 'application/json',
       },
     };
-    const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}${endpoints[detail]}${id}`, config);
+    const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}${deleteDrill}${id}`, config);
     tableStore.getDetails(detail);
     return res.data;
   } catch (error) {

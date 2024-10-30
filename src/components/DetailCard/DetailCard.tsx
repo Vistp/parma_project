@@ -41,6 +41,7 @@ export const DetailCard = observer(() => {
   }
 
   const images = item.image_path ? item.image_path.split(',').map((img) => img.trim()) : [];
+  const hasImages = images.length > 0;
 
   const handlePrevImage = () => {
     setImageIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
@@ -93,12 +94,14 @@ export const DetailCard = observer(() => {
                 }}
               />
             </Box>
-            <Box sx={{ fontSize: '14px', color: 'gray' }}>{`${imageIndex + 1}/${images.length}`}</Box>
+            <Box sx={{ fontSize: '14px', color: 'gray' }}>
+              {hasImages ? `${imageIndex + 1}/${images.length}` : 'Нет изображений'}
+            </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
-              <IconButton onClick={handlePrevImage} disabled={imageIndex === 0}>
+              <IconButton onClick={handlePrevImage} disabled={!hasImages || imageIndex === 0}>
                 <ChevronLeft />
               </IconButton>
-              <IconButton onClick={handleNextImage} disabled={imageIndex === images.length - 1}>
+              <IconButton onClick={handleNextImage} disabled={!hasImages || imageIndex === images.length - 1}>
                 <ChevronRight />
               </IconButton>
             </Box>
