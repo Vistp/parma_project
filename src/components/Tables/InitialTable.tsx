@@ -91,7 +91,7 @@ const InitialTable = observer(() => {
   return (
     <>
       {/* Панель кнопок над таблицей*/}
-			<TablesButtons openFilter={openFilterDrawer} activeItems={activeItems} />
+			<TablesButtons openFilter={openFilterDrawer} activeItems={activeItems as DetailType} />
 
       {/* Индикация активных фильтров */}
       {selectedParameters.length > 0 && (

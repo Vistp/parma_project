@@ -1,5 +1,4 @@
 import { Button } from 'antd';
-// import AddDrillForm from './../AddDrillForm';
 import 'app/index.css';
 import AddModal from 'components/AddForm/AddModal';
 import { DetailType } from 'types/types';
