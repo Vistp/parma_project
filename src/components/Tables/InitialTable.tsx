@@ -1,4 +1,5 @@
 import { Button, Table, TableProps, Tag } from 'antd';
+import { useVT } from 'virtualizedtableforantd4';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import tableStore from 'store/tableStore';
@@ -41,19 +42,21 @@ const InitialTable = observer(() => {
   };
 
 	let columns: ColumnsType<IDetail> = drillsColumns(handleEditClick);
-
+  
   const filteredData = selectedParameters.length
   ? tableStore.details.filter((detail) => {
-      if (detail.diameter) {
-        return selectedParameters.includes(detail.diameter)
-      } else if (detail.length) {
-        return selectedParameters.includes(detail.length)
-      } else if (detail.amount) {
-        return selectedParameters.includes(detail.amount)
-      }
-    })
+    if (detail.diameter) {
+      return selectedParameters.includes(detail.diameter)
+    } else if (detail.length) {
+      return selectedParameters.includes(detail.length)
+    } else if (detail.amount) {
+      return selectedParameters.includes(detail.amount)
+    }
+  })
   : tableStore.details;
-
+  
+  const [vt] = useVT(() => ({ scroll: { y: 100 }, debug: true }), [filteredData]);
+  
 	switch (activeItems) {
 		case 'drills':
 			columns = drillsColumns(handleEditClick);
@@ -116,6 +119,7 @@ const InitialTable = observer(() => {
         onChange={onChange}
         scroll={{ x: 1000, y: 55 * 5 }}
         pagination={false}
+        components={vt}
         onRow={(record) => ({
           onClick: () => {tableStore.getDetailIdDescription(record.id)},
           style: { cursor: 'pointer' }
