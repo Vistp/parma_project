@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, Upload, Button, UploadFile } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { getData, getDetail, /* getDrill, */ updateDrill } from 'utils/api';
+import { getData, getDetail, updateDrill } from 'utils/api';
 import { IFormDrill, IDetail, DetailType } from 'types/types';
 import tableStore from 'store/tableStore';
 
