@@ -31,6 +31,7 @@ interface IScrew {
   image_path: string;
   create_at?: string;
   update_at?: string
+  images?: File[] | UploadFile[];
 };
 
 interface IPlate {
@@ -45,6 +46,7 @@ interface IPlate {
   image_path: string;
   create_at?: string;
   update_at?: string;
+  images?: File[] | UploadFile[];
 };
 
 interface IDrill {

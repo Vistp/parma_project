@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import tableStore from 'store/tableStore';
 import { DetailType, IDetail } from 'types/types';
 import { useThemeContext } from 'app/ThemeContextProvaider';
-import { EditDrillForm } from '../EditDrillForm';
 import TablesButtons from 'components/TablesButtons/TablesButtons';
 import TablesFilter from 'components/TablesFilter/TablesFilter';
 import { drillsColumns, platesColumns, skrewsColumns } from './columns';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ColumnsType } from 'antd/es/table';
 import 'app/index.css';
+import { EditItemForm } from 'components/EditForm/EditItemForm';
 
 const InitialTable = observer(() => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -130,7 +130,7 @@ const InitialTable = observer(() => {
 				selectedParameters={selectedParameters}
 				resetFilter={resetFilter}
 			/>
-      <EditDrillForm 
+      <EditItemForm 
         id={tableStore.idDetailEdit}
         activeItem={activeItems as DetailType}
         visible={visible} 

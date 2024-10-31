@@ -1,48 +1,28 @@
-import { Form, Input, Button, Modal, Select, Upload } from 'antd';
-import { useThemeContext } from 'app/ThemeContextProvaider';
-import { useEffect, useState } from 'react';
-import tableStore from 'store/tableStore';
-import { IFormDrill, IDetail, ErrorInterface, SuccessInterface } from 'types/types';
-import { addDrill, getData } from 'utils/api';
+import { Form, Input, Button, Select, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { useThemeContext } from 'app/ThemeContextProvaider';
+import { useState } from 'react';
+import { IFormDrill, ErrorInterface, SuccessInterface } from 'types/types';
 import { UploadFile } from 'antd/es/upload';
+import useLoadData from '../useLoadData';
 
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 16 } };
 const tailLayout = { wrapperCol: { offset: 6, span: 16 } };
 
-
-function AddForm({
-  onSubmit,
-  onSuccess,
-}: {
+interface AddFormProps {
   onSubmit: (values: IFormDrill) => Promise<ErrorInterface | SuccessInterface>;
   onSuccess: () => void;
-}) {
-  const [screws, setScrews] = useState<IDetail[]>([]);
-  const [plates, setPlates] = useState<IDetail[]>([]);
+}
+
+const DrillForm: React.FC<AddFormProps> = ({ onSubmit, onSuccess }) => {
+  const [form] = Form.useForm();
+  const { mode } = useThemeContext();
+  const { screws, plates } = useLoadData();
   const [images, setImages] = useState<UploadFile[]>([]);
 
   const handleChange = ({ fileList }: { fileList: UploadFile[] }) => {
     setImages(fileList);
   };
-
-  useEffect(() => {
-    const getAllScrews = async () => {
-      const res = await getData('screws');
-      setScrews(res);
-    };
-    const getAllPlates = async () => {
-      const res = await getData('plates');
-      setPlates(res);
-    };
-
-    getAllPlates();
-    getAllScrews();
-  }, []);
-
-  const [form] = Form.useForm();
-
-  const { mode } = useThemeContext(); // тема 'light' или 'dark'
 
   return (
     <Form
@@ -51,7 +31,6 @@ function AddForm({
       {...layout}
       name="basic"
       initialValues={{
-        remember: true,
         name: 'new',
         diameter: 0.5,
         length_xD: 10,
@@ -65,10 +44,10 @@ function AddForm({
       onFinish={async (values) => {
         values.images = images;
         try {
-          console.log(values);
-          const result = await onSubmit(values);
-          console.log('Result: ', result);
+          await onSubmit(values);
           onSuccess();
+          form.resetFields();
+          setImages([]);
         } catch (error) {
           alert(`Возникла ошибка при отправке формы: ${(error as ErrorInterface)?.message ?? 'Неизвестная ошибка'}`);
         }
@@ -111,7 +90,7 @@ function AddForm({
         </Select>
       </Form.Item>
       <Form.Item label="Винты" name="screws" rules={[{ required: true, message: 'Пожалуйста, выберите винт!' }]}>
-        <Select mode="multiple" style={{ width: '100%' }} placeholder="Выберите винт...">
+        <Select mode="multiple" placeholder="Выберите винт...">
           {screws.map((screw) => (
             <Select.Option key={screw.id} value={screw.id}>
               {screw.type}
@@ -119,8 +98,8 @@ function AddForm({
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label="Пластины" name="plates" rules={[{ required: true, message: 'Пожалуйста, выберите винт(ы)!' }]}>
-        <Select mode="multiple" style={{ width: '100%' }} placeholder="Выберите пластину...">
+      <Form.Item label="Пластины" name="plates" rules={[{ required: true, message: 'Пожалуйста, выберите пластину!' }]}>
+        <Select mode="multiple" placeholder="Выберите пластину...">
           {plates.map((plate) => (
             <Select.Option key={plate.id} value={plate.id}>
               {plate.type}
@@ -128,20 +107,11 @@ function AddForm({
           ))}
         </Select>
       </Form.Item>
-      <Form.Item
-        label="Место хранения"
-        name="storage"
-        rules={[{ required: true, message: 'Пожалуйста, выберите место хранения!' }]}
-      >
-        <Input placeholder="Пожалуйста, выберите место хранения" />
-      </Form.Item>
-
       <Form.Item label="Изображение" name="images">
         <Upload fileList={images} onChange={handleChange}>
           <Button icon={<UploadOutlined />}>Нажмите, чтобы загрузить</Button>
         </Upload>
       </Form.Item>
-
       <Form.Item
         label="Описание"
         name="description"
@@ -149,8 +119,6 @@ function AddForm({
       >
         <Input.TextArea rows={4} placeholder="Пожалуйста, введите подробное описание" />
       </Form.Item>
-
-      {/* Кнопка "Отправить" */}
       <Form.Item {...tailLayout}>
         <Button type="primary" htmlType="submit">
           Отправить
@@ -158,42 +126,6 @@ function AddForm({
       </Form.Item>
     </Form>
   );
-}
-
-const AddModal = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const showModal = () => {
-    setModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setModalOpen(false);
-  };
-
-  const handleSuccess = () => {
-    setModalOpen(false);
-    tableStore.getDetails('drills');
-  };
-
-  const { mode } = useThemeContext(); // тема 'light' или 'dark'
-
-  return (
-    <>
-      <Button type="primary" onClick={showModal}>
-        Добавить сверло
-      </Button>
-      <Modal
-        className={mode === 'light' ? 'light-theme' : 'dark-theme'}
-        title="Добавление сверла"
-        open={modalOpen}
-        footer={null}
-        onCancel={handleCancel}
-      >
-        <AddForm onSubmit={addDrill} onSuccess={handleSuccess} />
-      </Modal>
-    </>
-  );
 };
 
-export default AddModal;
+export default DrillForm;

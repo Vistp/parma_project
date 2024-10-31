@@ -174,6 +174,12 @@ const platesColumns = (handleEditClick: (id: number) => void): TableColumnsType<
     },
     {
       title: 'Тип',
+      dataIndex: 'type',
+      sorter: (a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()),
+      sortDirections: ['ascend', 'descend'],
+    },
+    {
+      title: 'Подтип',
       dataIndex: 'sub_type',
       sorter: (a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()),
       sortDirections: ['ascend', 'descend'],
